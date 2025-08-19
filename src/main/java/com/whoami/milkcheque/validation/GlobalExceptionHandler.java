@@ -1,5 +1,7 @@
 package com.whoami.milkcheque.validation;
 
+import com.whoami.milkcheque.exception.*;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,25 +21,10 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers,
-            HttpStatus status, WebRequest request) {
-
-        // Create a response body map
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("timestamp", Instant.now().toString()); // ISO-8601 timestamp
-        responseBody.put("status", status.value());
-        responseBody.put("error", status.getReasonPhrase()); // e.g., "Bad Request"
-
-        // Collect all validation errors
-        List<String> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(fieldError -> fieldError.getDefaultMessage())
-                .collect(Collectors.toList());
-
-        responseBody.put("errors", errors);
-
-        return new ResponseEntity<>(responseBody, headers, status);
+    @ExceptionHandler(AuthenticationFormatException.class)
+    public ResponseEntity<Object> handleAuthenticationFormatException(AuthenticationFormatException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(exception.getMessage());
     }
 }

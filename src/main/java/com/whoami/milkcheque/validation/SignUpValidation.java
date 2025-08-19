@@ -13,58 +13,81 @@ import java.util.Optional;
 public class SignUpValidation {
 
     public void firstNameValidation(String name) throws AuthenticationFormatException {
-        if(name!=null) {
-            if(!name.matches("^[A-Za-z]+$")){
-                throw new AuthenticationFormatException("Name must contain only letters", HttpStatus.BAD_REQUEST,AuthenticationStatus.InFirstName);
-            }
-        }
+        String message = null;
+        if (name == null)
+            message = "First name is null";
+        else if (name.isEmpty())
+            message = "First name field is empty";
+        else if (!name.matches("^[A-Za-z]+$"))
+            message = "First name format invalid";
+        if (message == null)
+            return;
+        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
     }
-    public void lastNameValidation(String name) throws AuthenticationFormatException {
-        if(name!=null) {
-            if(!name.matches("^[A-Za-z]+$")){
-                throw new AuthenticationFormatException("Name must contain only letters",HttpStatus.BAD_REQUEST,AuthenticationStatus.InLastName);
-            }
 
-        }
+    public void lastNameValidation(String name) throws AuthenticationFormatException {
+        String message = null;
+        if (name == null)
+            message = "Last name is null";
+        else if (name.isEmpty())
+            message = "Last name field is empty";
+        else if (!name.matches("^[A-Za-z]+$"))
+            message = "Invalid last name format";
+        if (message == null)
+            return;
+        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
     }
 
     public void emailValidation(String email) throws AuthenticationFormatException {
-        if(email!=null) {
-
-            if(!email.matches("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$/")){
-                throw new AuthenticationFormatException("Invalid e-mail",HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
-
-            }
-        }
+        String message = null;
+        if (email == null)
+            message = "Email is null";
+        else if (email.isEmpty())
+            message = "Email field is empty";
+        else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
+            message = "Invalid email format";
+        if (message == null)
+            return;
+        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
     }
 
-    public void ageValidation(int age) throws AuthenticationFormatException {
-        Integer intAge= age;
-        if(intAge!=null) {
-
-            if( intAge< 0 || intAge > 100) {
-                throw new AuthenticationFormatException("Invalid age",HttpStatus.BAD_REQUEST,AuthenticationStatus.InAge);
-
-            }
-        }
+    public void ageValidation(Integer age) throws AuthenticationFormatException {
+        String message = null;
+        if (age == null)
+            message = "Age is null";
+        else if (age < 0)
+            message = "Oh you are in the void.. adorable ^_^";
+        else if (age > 150)
+            message = "<3 ربنا ياخدك";
+        if (message == null)
+            return;
+        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
     }
 
     public void phoneNumberValidation(String phoneNumber){
-        if(phoneNumber!=null) {
-            if(!phoneNumber.matches("^[0-9]{10}$")){
-                throw new AuthenticationFormatException("Invalid phone number",HttpStatus.BAD_REQUEST, AuthenticationStatus.InPhoneNumber);
-
-            }
-        }
+        String message = null;
+        if (phoneNumber == null)
+            message = "Phone number is null";
+        else if (phoneNumber.isEmpty())
+            message = "Phone number field is empty";
+        else if (!phoneNumber.matches("^[0-9]{10}$"))
+            message = "Invalid phone number";
+        if (message == null)
+            return;
+        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
     }
 
     public void passwordValidation(String password){
-        if(password!=null) {
-            if(!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$")){
-                throw new AuthenticationFormatException("Invalid Password",HttpStatus.BAD_REQUEST,AuthenticationStatus.InPassword);
-
-            }
-        }
+        String message = null;
+        if (password == null)
+            message = "Password is null";
+        if (password.isEmpty())
+            message = "Password field is empty";
+        if (!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$"))
+            message = "Invalid password";
+        if (message == null)
+            return;
+        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
     }
 
     public void validateStaff(StaffDTO staffDTO) {

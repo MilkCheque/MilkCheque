@@ -7,11 +7,11 @@ import lombok.Data;
 
 @Data
 public class StaffDTO {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private int    age;
-    private String phoneNumber;
-    private String password;
+    private Long    id;
+    private String  firstName;
+    private String  lastName;
+    private String  email;
+    private Integer age;
+    private String  phoneNumber;
+    private String  password;
 }

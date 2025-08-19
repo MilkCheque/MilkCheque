@@ -14,7 +14,7 @@ public class StaffModel {
     private String firstName;
     @Column(length = 50)
     private String lastName;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String email;
     private int   age;
 

@@ -40,8 +40,10 @@ public class StaffService {
     }
 
     public void saveStaff(StaffDTO staffDTO) {
-        StaffModel staffModel=convertToEntity(staffDTO);
+        StaffModel staffModel;
 
+        SignUpValidation(staffDTO);
+        staffModel = convertToEntity(staffDTO);
         staffRepository.save(staffModel);
     }
 
