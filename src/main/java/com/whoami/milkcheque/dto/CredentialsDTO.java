@@ -6,12 +6,7 @@ import jakarta.persistence.GenerationType;
 import lombok.Data;
 
 @Data
-public class StaffDTO {
-    private Long id;
-    private String firstName;
-    private String lastName;
+public class CredentialsDTO {
     private String email;
-    private int    age;
-    private String phoneNumber;
     private String password;
 }

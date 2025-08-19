@@ -3,25 +3,27 @@ package com.whoami.milkcheque.service;
 import com.whoami.milkcheque.model.StaffModel;
 import com.whoami.milkcheque.repository.CustomerRepository;
 import com.whoami.milkcheque.repository.StaffRepository;
-import dto.StaffDTO;
+import com.whoami.milkcheque.dto.StaffDTO;
+import com.whoami.milkcheque.dto.CredentialsDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class StaffService {
     @Autowired
     StaffRepository staffRepository;
 
-    public StaffService (StaffRepository staffRepository) {
+    public StaffService(StaffRepository staffRepository) {
         this.staffRepository=staffRepository;
-
     }
 
 
     private StaffModel convertToEntity(StaffDTO staffDTO) {
         StaffModel staffModel = new StaffModel();
 
-        System.out.println("staffDTO: "+staffDTO.getFirstName());
         staffModel.setFirstName(staffDTO.getFirstName());
         staffModel.setLastName(staffDTO.getLastName());
         staffModel.setEmail(staffDTO.getEmail());
@@ -35,10 +37,16 @@ public class StaffService {
 
     public void saveStaff(StaffDTO staffDTO) {
         StaffModel staffModel=convertToEntity(staffDTO);
-        System.out.println("staffModel: "+staffModel.getFirstName());
+
         staffRepository.save(staffModel);
     }
 
+    public boolean checkCredential(CredentialsDTO credentialsDTO) {
+        Optional<StaffModel> staffModel = this.staffRepository.findByEmail(credentialsDTO.getEmail());
+      
+        if (!staffModel.isPresent()) 
+          return false;
 
-
+        return staffModel.get().getPassword().equals(credentialsDTO.getPassword());
+    }
 }
