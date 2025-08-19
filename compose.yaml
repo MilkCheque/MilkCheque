@@ -9,4 +9,4 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - /Users/hamed/mysql:/var/lib/mysql
+      - /home/rola/mysqltmp:/var/lib/mysql

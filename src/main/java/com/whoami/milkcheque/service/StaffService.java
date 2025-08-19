@@ -6,6 +6,7 @@ import com.whoami.milkcheque.repository.StaffRepository;
 import com.whoami.milkcheque.dto.StaffDTO;
 import com.whoami.milkcheque.dto.CredentialsDTO;
 
+import com.whoami.milkcheque.validation.SignUpValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ import java.util.Optional;
 public class StaffService {
     @Autowired
     StaffRepository staffRepository;
+
+
+    SignUpValidation signUpValidation=new SignUpValidation();
 
     public StaffService(StaffRepository staffRepository) {
         this.staffRepository=staffRepository;
@@ -39,6 +43,10 @@ public class StaffService {
         StaffModel staffModel=convertToEntity(staffDTO);
 
         staffRepository.save(staffModel);
+    }
+
+    public void SignUpValidation(StaffDTO staffDTO){
+        signUpValidation.validateStaff(staffDTO);
     }
 
     public boolean checkCredential(CredentialsDTO credentialsDTO) {

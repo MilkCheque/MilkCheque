@@ -10,7 +10,7 @@ public class AuthenticationFormatException extends RuntimeException {
     public HttpStatus httpStatus;
     public AuthenticationStatus authenticationStatus;
 
-    AuthenticationFormatException(String message, HttpStatus httpStatus, AuthenticationStatus authenticationStatus) {
+    public AuthenticationFormatException(String message, HttpStatus httpStatus, AuthenticationStatus authenticationStatus) {
         super(message);
         this.httpStatus = httpStatus;
         this.authenticationStatus = authenticationStatus;

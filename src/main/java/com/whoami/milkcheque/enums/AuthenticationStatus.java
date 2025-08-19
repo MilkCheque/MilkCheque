@@ -4,7 +4,7 @@ public enum AuthenticationStatus {
     InFirstName,
     InLastName,
     InEmail,
-    InNumber,
+    InPhoneNumber,
     InAge,
     InPassword,
     Success

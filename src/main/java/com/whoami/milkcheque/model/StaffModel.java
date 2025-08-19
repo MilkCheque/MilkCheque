@@ -17,6 +17,7 @@ public class StaffModel {
     @Column(length = 100, nullable = false)
     private String email;
     private int   age;
+
     private String password;
     @Column(length = 11)
     private String phoneNumber;
