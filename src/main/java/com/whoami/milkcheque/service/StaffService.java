@@ -1,12 +1,11 @@
 package com.whoami.milkcheque.service;
 
 import com.whoami.milkcheque.model.StaffModel;
-import com.whoami.milkcheque.repository.CustomerRepository;
 import com.whoami.milkcheque.repository.StaffRepository;
 import com.whoami.milkcheque.dto.StaffDTO;
 import com.whoami.milkcheque.dto.CredentialsDTO;
 
-import com.whoami.milkcheque.validation.SignUpValidation;
+import com.whoami.milkcheque.validation.AuthenticationValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class StaffService {
     StaffRepository staffRepository;
 
 
-    SignUpValidation signUpValidation=new SignUpValidation();
+    AuthenticationValidation authenticationValidation = new AuthenticationValidation();
 
     public StaffService(StaffRepository staffRepository) {
         this.staffRepository=staffRepository;
@@ -48,10 +47,12 @@ public class StaffService {
     }
 
     public void SignUpValidation(StaffDTO staffDTO){
-        signUpValidation.validateStaff(staffDTO);
+        authenticationValidation.validateStaffSignup(staffDTO);
     }
 
     public boolean checkCredential(CredentialsDTO credentialsDTO) {
+        authenticationValidation.validateStaffLogin(credentialsDTO);
+
         Optional<StaffModel> staffModel = this.staffRepository.findByEmail(credentialsDTO.getEmail());
       
         if (!staffModel.isPresent()) 

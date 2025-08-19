@@ -1,16 +1,14 @@
 package com.whoami.milkcheque.validation;
 
+import com.whoami.milkcheque.dto.CredentialsDTO;
 import com.whoami.milkcheque.dto.StaffDTO;
 import com.whoami.milkcheque.enums.AuthenticationStatus;
 import com.whoami.milkcheque.exception.AuthenticationFormatException;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 
-import javax.naming.AuthenticationException;
-import javax.swing.text.html.Option;
-import java.util.Optional;
+import javax.swing.*;
 
-public class SignUpValidation {
+public class AuthenticationValidation {
 
     public void firstNameValidation(String name) throws AuthenticationFormatException {
         String message = null;
@@ -90,7 +88,7 @@ public class SignUpValidation {
         throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
     }
 
-    public void validateStaff(StaffDTO staffDTO) {
+    public void validateStaffSignup(StaffDTO staffDTO) {
         firstNameValidation(staffDTO.getFirstName());
         lastNameValidation(staffDTO.getLastName());
         emailValidation(staffDTO.getEmail());
@@ -99,4 +97,7 @@ public class SignUpValidation {
         passwordValidation(staffDTO.getPassword());
     }
 
+    public void validateStaffLogin(CredentialsDTO credentialsDTO) {
+        emailValidation(credentialsDTO.getEmail());
+    }
 }
