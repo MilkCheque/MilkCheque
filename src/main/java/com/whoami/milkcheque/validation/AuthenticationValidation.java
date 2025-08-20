@@ -4,11 +4,25 @@ import com.whoami.milkcheque.dto.CredentialsDTO;
 import com.whoami.milkcheque.dto.StaffDTO;
 import com.whoami.milkcheque.enums.AuthenticationStatus;
 import com.whoami.milkcheque.exception.AuthenticationFormatException;
+import com.whoami.milkcheque.model.StaffModel;
+import com.whoami.milkcheque.repository.StaffRepository;
+import com.whoami.milkcheque.service.StaffService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
+import java.util.Optional;
 
+@Component
 public class AuthenticationValidation {
+
+    private final StaffRepository staffRepository;
+
+    @Autowired
+    public AuthenticationValidation(StaffRepository staffRepository) {
+        this.staffRepository = staffRepository;
+    }
 
     public void firstNameValidation(String name) throws AuthenticationFormatException {
         String message = null;
@@ -88,6 +102,29 @@ public class AuthenticationValidation {
         throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
     }
 
+    public void emailExists(String email) {
+        String message = null;
+        Optional<StaffModel> staffModel = this.staffRepository.findByEmail(email);
+
+        if(staffModel.isPresent())
+            message="Email already exists";
+
+        if(message==null)
+            return;
+        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
+
+    }
+
+    public void phoneNumberExists(StaffDTO staffDTO) {
+        Optional<StaffModel> staffModel = this.staffRepository.findByPhoneNumber(staffDTO.getPhoneNumber());
+        String message = null;
+        if(staffModel.isPresent())
+            message="Phone number already exists";
+        if(message==null)
+            return;
+        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
+    }
+
     public void validateStaffSignup(StaffDTO staffDTO) {
         firstNameValidation(staffDTO.getFirstName());
         lastNameValidation(staffDTO.getLastName());
@@ -95,6 +132,8 @@ public class AuthenticationValidation {
         ageValidation(staffDTO.getAge());
         phoneNumberValidation(staffDTO.getPhoneNumber());
         passwordValidation(staffDTO.getPassword());
+        emailExists(staffDTO.getEmail());
+        phoneNumberExists(staffDTO);
     }
 
     public void validateStaffLogin(CredentialsDTO credentialsDTO) {

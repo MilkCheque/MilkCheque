@@ -18,8 +18,11 @@ public class StaffController {
     private StaffService staffService;
 
     @PostMapping("/signup")
-    public void signup(@RequestBody StaffDTO staffDTO) {
+    public ResponseEntity<String> signup(@RequestBody StaffDTO staffDTO) {
+
         staffService.saveStaff(staffDTO);
+        return ResponseEntity.ok("success");
+
     }
 
     @PostMapping("/login")

@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.service;
 
+import com.whoami.milkcheque.mapper.StaffMapper;
 import com.whoami.milkcheque.model.StaffModel;
 import com.whoami.milkcheque.repository.StaffRepository;
 import com.whoami.milkcheque.dto.StaffDTO;
@@ -16,37 +17,24 @@ public class StaffService {
     @Autowired
     StaffRepository staffRepository;
 
+    @Autowired
+    AuthenticationValidation authenticationValidation ;
 
-    AuthenticationValidation authenticationValidation = new AuthenticationValidation();
+    StaffMapper staffMapper = new StaffMapper();
 
     public StaffService(StaffRepository staffRepository) {
         this.staffRepository=staffRepository;
     }
 
-
-    private StaffModel convertToEntity(StaffDTO staffDTO) {
-        StaffModel staffModel = new StaffModel();
-
-        staffModel.setFirstName(staffDTO.getFirstName());
-        staffModel.setLastName(staffDTO.getLastName());
-        staffModel.setEmail(staffDTO.getEmail());
-        staffModel.setAge(staffDTO.getAge());
-        staffModel.setPhoneNumber(staffDTO.getPhoneNumber());
-        staffModel.setPassword(staffDTO.getPassword());
-        return staffModel;
-
-
-    }
-
     public void saveStaff(StaffDTO staffDTO) {
         StaffModel staffModel;
 
-        SignUpValidation(staffDTO);
-        staffModel = convertToEntity(staffDTO);
+        signUpValidation(staffDTO);
+        staffModel = staffMapper.convertToEntity(staffDTO);
         staffRepository.save(staffModel);
     }
 
-    public void SignUpValidation(StaffDTO staffDTO){
+    public void signUpValidation(StaffDTO staffDTO){
         authenticationValidation.validateStaffSignup(staffDTO);
     }
 
@@ -60,4 +48,6 @@ public class StaffService {
 
         return staffModel.get().getPassword().equals(credentialsDTO.getPassword());
     }
+
+
 }
