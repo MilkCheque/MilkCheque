@@ -3,6 +3,9 @@ package com.whoami.milkcheque.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @Table(name = "menu_item")
@@ -20,5 +23,12 @@ public class MenuItemModel {
     @Lob
     @Column(name = "mitem_image")
     private byte[] menuItemImage;
+
+    @ManyToOne
+    @JoinColumn(name="menu_id")
+    private MenuModel menuModel;
+
+    @ManyToMany(mappedBy = "menuItems")
+    private Set<CustomerOrderModel> customerOrders = new HashSet<>();
 
 }
