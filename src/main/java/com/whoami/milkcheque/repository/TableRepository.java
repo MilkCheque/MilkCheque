@@ -1,6 +1,8 @@
 package com.whoami.milkcheque.repository;
 
 import com.whoami.milkcheque.model.CustomerModel;
+import com.whoami.milkcheque.model.TableModel;
 import org.springframework.data.jpa.repository.JpaRepository;
-public interface CustomerRepository extends JpaRepository<CustomerModel, Long> {
+
+public interface TableRepository extends JpaRepository<TableModel, Long> {
 }

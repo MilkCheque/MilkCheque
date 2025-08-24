@@ -8,10 +8,9 @@ public class StaffMapper {
     public StaffModel convertToEntity(StaffDTO staffDTO) {
         StaffModel staffModel = new StaffModel();
 
-        staffModel.setFirstName(staffDTO.getFirstName());
-        staffModel.setLastName(staffDTO.getLastName());
+        staffModel.setName(staffDTO.getName());
         staffModel.setEmail(staffDTO.getEmail());
-        staffModel.setAge(staffDTO.getAge());
+        staffModel.setDateOfBirth(staffDTO.getDateOfBirth());
         staffModel.setPhoneNumber(staffDTO.getPhoneNumber());
         staffModel.setPassword(staffDTO.getPassword());
         return staffModel;
@@ -21,10 +20,9 @@ public class StaffMapper {
 
     public StaffDTO convertToDto(StaffModel staffModel) {
         StaffDTO staffDTO = new StaffDTO();
-        staffDTO.setFirstName(staffModel.getFirstName());
-        staffDTO.setLastName(staffModel.getLastName());
+        staffDTO.setName(staffModel.getName());
         staffDTO.setEmail(staffModel.getEmail());
-        staffDTO.setAge(staffModel.getAge());
+        staffDTO.setDateOfBirth(staffModel.getDateOfBirth());
         staffDTO.setPhoneNumber(staffModel.getPhoneNumber());
         staffDTO.setPassword(staffModel.getPassword());
 

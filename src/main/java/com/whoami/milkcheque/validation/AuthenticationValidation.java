@@ -24,27 +24,14 @@ public class AuthenticationValidation {
         this.staffRepository = staffRepository;
     }
 
-    public void firstNameValidation(String name) throws AuthenticationFormatException {
+    public void nameValidation(String name) throws AuthenticationFormatException {
         String message = null;
         if (name == null)
-            message = "First name is null";
+            message = "Name is null";
         else if (name.isEmpty())
-            message = "First name field is empty";
+            message = "Name field is empty";
         else if (!name.matches("^[A-Za-z]+$"))
-            message = "First name format invalid";
-        if (message == null)
-            return;
-        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
-    }
-
-    public void lastNameValidation(String name) throws AuthenticationFormatException {
-        String message = null;
-        if (name == null)
-            message = "Last name is null";
-        else if (name.isEmpty())
-            message = "Last name field is empty";
-        else if (!name.matches("^[A-Za-z]+$"))
-            message = "Invalid last name format";
+            message = "Name format invalid";
         if (message == null)
             return;
         throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
@@ -82,7 +69,7 @@ public class AuthenticationValidation {
             message = "Phone number is null";
         else if (phoneNumber.isEmpty())
             message = "Phone number field is empty";
-        else if (!phoneNumber.matches("^[0-9]{10}$"))
+        else if (!phoneNumber.matches("^(10|11|12|15)[0-9]{8}$"))
             message = "Invalid phone number";
         if (message == null)
             return;
@@ -126,10 +113,9 @@ public class AuthenticationValidation {
     }
 
     public void validateStaffSignup(StaffDTO staffDTO) {
-        firstNameValidation(staffDTO.getFirstName());
-        lastNameValidation(staffDTO.getLastName());
+        nameValidation(staffDTO.getName());
         emailValidation(staffDTO.getEmail());
-        ageValidation(staffDTO.getAge());
+//        ageValidation(staffDTO.getAge());
         phoneNumberValidation(staffDTO.getPhoneNumber());
         passwordValidation(staffDTO.getPassword());
         emailExists(staffDTO.getEmail());

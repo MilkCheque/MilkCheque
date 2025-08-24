@@ -12,12 +12,12 @@ import org.springframework.http.HttpStatus;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth") // context path
 public class StaffController {
     @Autowired
     private StaffService staffService;
 
-    @PostMapping("/signup")
+    @PostMapping("/signup") // end point
     public ResponseEntity<String> signup(@RequestBody StaffDTO staffDTO) {
 
         staffService.saveStaff(staffDTO);
