@@ -1,6 +1,8 @@
 package com.whoami.milkcheque.validation;
 
 import com.whoami.milkcheque.exception.*;
+import com.whoami.milkcheque.dto.SignUpResponse;
+import com.whoami.milkcheque.dto.LoginResponse;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,9 +24,29 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthenticationFormatException.class)
-    public ResponseEntity<Object> handleAuthenticationFormatException(AuthenticationFormatException exception) {
+    public ResponseEntity<Object> handleAuthenticationFormatException(
+            AuthenticationFormatException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(SignUpProcessFailureException.class)
+    public ResponseEntity<Object> handleSigupProcessFailureException(
+            SignUpProcessFailureException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new SignUpResponse(exception.getCode(),
+                                     exception.getMessage()));
+    }
+
+    @ExceptionHandler(LoginProcessFailureException.class)
+    public ResponseEntity<Object> handleLoginProcessFailureException(
+            LoginProcessFailureException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new LoginResponse(exception.getCode(),
+                                    exception.getMessage(),
+                                    ""));
     }
 }

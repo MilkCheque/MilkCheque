@@ -1,12 +1,15 @@
 package com.whoami.milkcheque.validation;
 
-import com.whoami.milkcheque.dto.CredentialsDTO;
-import com.whoami.milkcheque.dto.StaffDTO;
+import com.whoami.milkcheque.dto.SignUpRequest;
+import com.whoami.milkcheque.dto.SignUpResponse;
+import com.whoami.milkcheque.dto.LoginRequest;
+import com.whoami.milkcheque.dto.LoginResponse;
 import com.whoami.milkcheque.enums.AuthenticationStatus;
-import com.whoami.milkcheque.exception.AuthenticationFormatException;
+import com.whoami.milkcheque.exception.*;
 import com.whoami.milkcheque.model.StaffModel;
 import com.whoami.milkcheque.repository.StaffRepository;
-import com.whoami.milkcheque.service.StaffService;
+import com.whoami.milkcheque.service.AuthenticationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -16,113 +19,115 @@ import java.util.Optional;
 
 @Component
 public class AuthenticationValidation {
-
+    
     private final StaffRepository staffRepository;
+    private static final String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])" +
+                                         "(?=.*[A-Z])(?=.*[@#$%^&" +
+                                         "-+=()])(?=\\S+$).{8,20}$";
+    private static final String phoneRegex = "^(10|11|12|15)[0-9]{8}$";
+    private static final String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
-    @Autowired
-    public AuthenticationValidation(StaffRepository staffRepository) {
+    private AuthenticationValidation(StaffRepository staffRepository) {
         this.staffRepository = staffRepository;
     }
 
-    public void nameValidation(String name) throws AuthenticationFormatException {
+    public void nameValidation(String name) {
         String message = null;
         if (name == null)
-            message = "Name is null";
+            message = "name is null";
         else if (name.isEmpty())
-            message = "Name field is empty";
+            message = "name field is empty";
         else if (!name.matches("^[A-Za-z]+$"))
-            message = "Name format invalid";
+            message = "name format invalid";
         if (message == null)
             return;
-        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
+        throw new AuthenticationFormatException("-1", message);
     }
 
-    public void emailValidation(String email) throws AuthenticationFormatException {
-        String message = null;
-        if (email == null)
-            message = "Email is null";
-        else if (email.isEmpty())
-            message = "Email field is empty";
-        else if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"))
-            message = "Invalid email format";
-        if (message == null)
-            return;
-        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
-    }
-
-    public void ageValidation(Integer age) throws AuthenticationFormatException {
-        String message = null;
-        if (age == null)
-            message = "Age is null";
-        else if (age < 0)
-            message = "Oh you are in the void.. adorable ^_^";
-        else if (age > 150)
-            message = "<3 ربنا ياخدك";
-        if (message == null)
-            return;
-        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
-    }
-
-    public void phoneNumberValidation(String phoneNumber){
+    public void phoneNumberValidation(String phoneNumber) {
         String message = null;
         if (phoneNumber == null)
-            message = "Phone number is null";
+            message = "phone number is null";
         else if (phoneNumber.isEmpty())
-            message = "Phone number field is empty";
-        else if (!phoneNumber.matches("^(10|11|12|15)[0-9]{8}$"))
-            message = "Invalid phone number";
-        if (message == null)
-            return;
-        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
+            message = "phone number field is empty";
+        else if (!phoneNumber.matches(phoneRegex))
+            message = "invalid phone number";
+        try {
+          if (phoneNumberExist(phoneNumber))
+              message="phone number already exists";
+        } catch (Exception e) {
+            message = "phoneNumberExist: " + e.getMessage();
+        }
+        if (message == null) return;
+        throw new AuthenticationFormatException("-1", message);
     }
 
-    public void passwordValidation(String password){
+    public void passwordValidation(String password) {
         String message = null;
         if (password == null)
-            message = "Password is null";
+            message = "password is null";
         if (password.isEmpty())
-            message = "Password field is empty";
-        if (!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$"))
-            message = "Invalid password";
-        if (message == null)
-            return;
-        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
+            message = "password field is empty";
+        if (!password.matches(passwordRegex))
+            message = "invalid password";
+        if (message == null) return;
+        throw new AuthenticationFormatException("-1", message);
     }
 
-    public void emailExists(String email) {
+    public void emailValidation(String email) {
         String message = null;
-        Optional<StaffModel> staffModel = this.staffRepository.findByEmail(email);
-
-        if(staffModel.isPresent())
-            message="Email already exists";
-
-        if(message==null)
-            return;
-        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
-
+        if (email == null)
+            message = "email is null";
+        if (email.isEmpty())
+            message = "email field is empty";
+        if (!email.matches(emailRegex))
+            message = "invalid email";
+        if (message == null) return;
+        throw new AuthenticationFormatException("-1", message);
+      
     }
 
-    public void phoneNumberExists(StaffDTO staffDTO) {
-        Optional<StaffModel> staffModel = this.staffRepository.findByPhoneNumber(staffDTO.getPhoneNumber());
+    public boolean emailExist(String email) throws Exception {
+        Optional<StaffModel> staffModel = staffRepository.findByEmail(email);
+        return staffModel.isPresent();
+    }
+
+    public boolean phoneNumberExist(String phoneNumber) {
         String message = null;
-        if(staffModel.isPresent())
-            message="Phone number already exists";
-        if(message==null)
-            return;
-        throw new AuthenticationFormatException(message,HttpStatus.BAD_REQUEST,AuthenticationStatus.InEmail);
+        Optional<StaffModel> staffModel = staffRepository.findByPhoneNumber(
+              phoneNumber);
+        return staffModel.isPresent();
     }
 
-    public void validateStaffSignup(StaffDTO staffDTO) {
-        nameValidation(staffDTO.getName());
-        emailValidation(staffDTO.getEmail());
-//        ageValidation(staffDTO.getAge());
-        phoneNumberValidation(staffDTO.getPhoneNumber());
-        passwordValidation(staffDTO.getPassword());
-        emailExists(staffDTO.getEmail());
-        phoneNumberExists(staffDTO);
+    public void validateStaffSignup(SignUpRequest signUpRequest) {
+        String message = null;
+        nameValidation(signUpRequest.getName());
+        emailValidation(signUpRequest.getEmail());
+        //TODO: Validate DOB
+        phoneNumberValidation(signUpRequest.getPhoneNumber());
+        passwordValidation(signUpRequest.getPassword());
+        emailValidation(signUpRequest.getEmail());
+        try {
+          if (emailExist(signUpRequest.getEmail()))
+              message="email already exists";
+        } catch (Exception e) {
+            message = "emailExist: " + e.getMessage();
+        }
+        if (message != null)
+            throw new AuthenticationFormatException("-1", message);
     }
 
-    public void validateStaffLogin(CredentialsDTO credentialsDTO) {
-        emailValidation(credentialsDTO.getEmail());
+    public void validateStaffLogin(LoginRequest loginRequest) 
+        throws Exception {
+        emailValidation(loginRequest.getEmail());
+        if (loginRequest.getPassword() == null)
+          throw new AuthenticationFormatException("-1", "password is null");
+        Optional<StaffModel> staffModel = staffRepository .findByEmail(loginRequest .getEmail());
+        if (!staffModel.isPresent() || 
+            !staffModel.get().getPassword().
+            equals(loginRequest.getPassword()))
+          throw new AuthenticationFailureException("-1",
+              "email or password don't match");
+
     }
 }

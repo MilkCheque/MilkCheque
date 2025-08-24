@@ -1,33 +1,33 @@
 package com.whoami.milkcheque.mapper;
 
-import com.whoami.milkcheque.dto.StaffDTO;
+import com.whoami.milkcheque.dto.SignUpRequest;
 import com.whoami.milkcheque.model.StaffModel;
 
 public class StaffMapper {
 
-    public StaffModel convertToEntity(StaffDTO staffDTO) {
+    public StaffModel convertToEntity(SignUpRequest signUpRequest) {
         StaffModel staffModel = new StaffModel();
 
-        staffModel.setName(staffDTO.getName());
-        staffModel.setEmail(staffDTO.getEmail());
-        staffModel.setDateOfBirth(staffDTO.getDateOfBirth());
-        staffModel.setPhoneNumber(staffDTO.getPhoneNumber());
-        staffModel.setPassword(staffDTO.getPassword());
+        staffModel.setName(signUpRequest.getName());
+        staffModel.setEmail(signUpRequest.getEmail());
+        staffModel.setDateOfBirth(signUpRequest.getDateOfBirth());
+        staffModel.setPhoneNumber(signUpRequest.getPhoneNumber());
+        staffModel.setPassword(signUpRequest.getPassword());
         return staffModel;
 
 
     }
 
-    public StaffDTO convertToDto(StaffModel staffModel) {
-        StaffDTO staffDTO = new StaffDTO();
-        staffDTO.setName(staffModel.getName());
-        staffDTO.setEmail(staffModel.getEmail());
-        staffDTO.setDateOfBirth(staffModel.getDateOfBirth());
-        staffDTO.setPhoneNumber(staffModel.getPhoneNumber());
-        staffDTO.setPassword(staffModel.getPassword());
+    public SignUpRequest convertToDto(StaffModel staffModel) {
+        SignUpRequest signUpRequest = new SignUpRequest();
+        signUpRequest.setName(staffModel.getName());
+        signUpRequest.setEmail(staffModel.getEmail());
+        signUpRequest.setDateOfBirth(staffModel.getDateOfBirth());
+        signUpRequest.setPhoneNumber(staffModel.getPhoneNumber());
+        signUpRequest.setPassword(staffModel.getPassword());
 
-        return staffDTO;
 
+        return signUpRequest;
     }
 
 }

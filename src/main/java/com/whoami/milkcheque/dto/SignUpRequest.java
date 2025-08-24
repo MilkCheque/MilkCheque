@@ -8,7 +8,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class StaffDTO {
+public class SignUpRequest {
     private Long    id;
     private String  name;
     private String  email;
