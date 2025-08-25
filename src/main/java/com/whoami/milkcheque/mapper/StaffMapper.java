@@ -1,6 +1,6 @@
 package com.whoami.milkcheque.mapper;
 
-import com.whoami.milkcheque.dto.SignUpRequest;
+import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.model.StaffModel;
 
 public class StaffMapper {

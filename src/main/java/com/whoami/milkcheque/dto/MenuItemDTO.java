@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 public class MenuItemDTO {
-    private int menuItemId;
+    private Long menuItemId;
     private String menuItemName;
-    private double price;
+    private Double price;
     private String menuItemDescription;
-    //image
+    private Byte[] menuItemIcon;
 
 }

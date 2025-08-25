@@ -13,7 +13,7 @@ public class StoreModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="store_id")
-    private Long StoreId;
+    private Long storeId;
     @Column(name ="store_name")
     private String storeName;
     @Column(name = "store_location")
