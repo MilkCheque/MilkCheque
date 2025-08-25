@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,6 +27,7 @@ public class MenuItemModel {
 
     @ManyToOne
     @JoinColumn(name="menu_id")
+    @JsonIgnore
     private MenuModel menuModel;
 
     @ManyToMany(mappedBy = "menuItems")
