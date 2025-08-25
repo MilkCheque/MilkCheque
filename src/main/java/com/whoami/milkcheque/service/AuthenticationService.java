@@ -3,19 +3,16 @@ package com.whoami.milkcheque.service;
 import com.whoami.milkcheque.mapper.StaffMapper;
 import com.whoami.milkcheque.model.StaffModel;
 import com.whoami.milkcheque.repository.StaffRepository;
-import com.whoami.milkcheque.dto.SignUpRequest;
-import com.whoami.milkcheque.dto.SignUpResponse;
+import com.whoami.milkcheque.dto.request.SignUpRequest;
+import com.whoami.milkcheque.dto.response.SignUpResponse;
 import com.whoami.milkcheque.dto.LoginRequest;
 import com.whoami.milkcheque.dto.LoginResponse;
 import com.whoami.milkcheque.validation.AuthenticationValidation;
 import com.whoami.milkcheque.exception.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.net.URI;
 
 @Service
 public class AuthenticationService {
@@ -34,8 +31,7 @@ public class AuthenticationService {
             signUpValidation(signUpRequest);
             StaffModel staffModel = staffMapper.convertToEntity(signUpRequest);
             staffRepository.save(staffModel);
-            //TODO: add actual URI
-            return ResponseEntity.created(new URI("id")).body(new SignUpResponse("0", "created"));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new SignUpResponse("0", "created"));
         } catch(Exception e) {
             throw new SignUpProcessFailureException("-1", e.getMessage());
         }

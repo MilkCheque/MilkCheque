@@ -2,12 +2,11 @@ package com.whoami.milkcheque.repository;
 
 import com.whoami.milkcheque.model.MenuItemModel;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Optional;
-
+@Repository
 public interface MenuItemRepository extends JpaRepository<MenuItemModel, Long> {
-    @Query
-    Optional<MenuItemModel> findByMenuId(int menuId);
+
+    ArrayList<MenuItemModel> findByMenuModel_MenuId(Long menuId);
 }

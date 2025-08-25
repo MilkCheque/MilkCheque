@@ -1,20 +1,13 @@
 package com.whoami.milkcheque.validation;
 
-import com.whoami.milkcheque.dto.SignUpRequest;
-import com.whoami.milkcheque.dto.SignUpResponse;
+import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.dto.LoginRequest;
-import com.whoami.milkcheque.dto.LoginResponse;
-import com.whoami.milkcheque.enums.AuthenticationStatus;
 import com.whoami.milkcheque.exception.*;
 import com.whoami.milkcheque.model.StaffModel;
 import com.whoami.milkcheque.repository.StaffRepository;
-import com.whoami.milkcheque.service.AuthenticationService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
 import java.util.Optional;
 
 @Component

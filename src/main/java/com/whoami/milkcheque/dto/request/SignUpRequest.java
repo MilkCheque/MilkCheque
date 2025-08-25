@@ -1,14 +1,12 @@
-package com.whoami.milkcheque.dto;
+package com.whoami.milkcheque.dto.request;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
 public class SignUpRequest {
+//    @EMailValidation
     private Long    id;
     private String  name;
     private String  email;

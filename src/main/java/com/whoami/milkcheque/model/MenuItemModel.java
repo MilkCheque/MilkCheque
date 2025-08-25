@@ -27,7 +27,6 @@ public class MenuItemModel {
 
     @ManyToOne
     @JoinColumn(name="menu_id")
-    @JsonIgnore
     private MenuModel menuModel;
 
     @ManyToMany(mappedBy = "menuItems")

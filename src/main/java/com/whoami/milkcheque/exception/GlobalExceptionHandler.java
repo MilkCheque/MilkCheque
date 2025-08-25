@@ -1,24 +1,13 @@
-package com.whoami.milkcheque.validation;
+package com.whoami.milkcheque.exception;
 
-import com.whoami.milkcheque.exception.*;
-import com.whoami.milkcheque.dto.SignUpResponse;
+import com.whoami.milkcheque.dto.ErrorModel;
 import com.whoami.milkcheque.dto.LoginResponse;
-
-import org.springframework.http.HttpHeaders;
+import com.whoami.milkcheque.dto.response.SignUpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -48,5 +37,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new LoginResponse(exception.getCode(),
                                     exception.getMessage(),
                                     ""));
+    }
+    @ExceptionHandler(MenuItemRetrievalException.class)
+    public ResponseEntity<Object> handleMenuItemRetrievalException(MenuItemRetrievalException exception){
+        ErrorModel errorModel = new ErrorModel();
+        errorModel.setCode("22");
+        errorModel.setMessage(exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(errorModel);
+    }
+    @ExceptionHandler(StoreInfoRetrievalException.class)
+    public ResponseEntity<Object> handleStoreInfoRetrievalException(
+            StoreInfoRetrievalException exception){
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(exception.getMessage());
     }
 }

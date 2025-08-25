@@ -1,8 +1,5 @@
-package com.whoami.milkcheque.dto;
+package com.whoami.milkcheque.dto.response;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.Data;
 
 @Data

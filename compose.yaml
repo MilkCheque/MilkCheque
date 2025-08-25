@@ -1,5 +1,5 @@
 services:
-   db:
+  db:
     image: mysql:8.0
     container_name: mysql
     environment:
@@ -9,4 +9,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - /home/rola/mysqltmp:/var/lib/mysql
+        - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
