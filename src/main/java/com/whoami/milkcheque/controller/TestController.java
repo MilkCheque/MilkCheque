@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
   
-    @PostMapping("/Test")
+    @PostMapping("/test")
     public String test(){
        return "POST works!"; 
     }
