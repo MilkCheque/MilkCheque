@@ -15,6 +15,8 @@ public class TableModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="store_table_id")
     private Long tableId;
+    @Column(name= "is_active")
+    private boolean isActive;
 
     @ManyToOne
     @JoinColumn(name="store_id")

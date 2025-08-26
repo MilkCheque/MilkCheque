@@ -1,4 +1,4 @@
-package com.whoami.milkcheque.dto;
+package com.whoami.milkcheque.dto.response;
 
 import lombok.Data;
 
@@ -6,4 +6,5 @@ import lombok.Data;
 public class StoreInfo {
     String storeName;
     String storeLocation;
+    Long tableId;
 }

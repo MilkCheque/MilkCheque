@@ -1,9 +1,10 @@
 package com.whoami.milkcheque.controller;
 
 
-import com.whoami.milkcheque.dto.MenuItemDTO;
-import com.whoami.milkcheque.dto.StoreInfo;
+import com.whoami.milkcheque.dto.response.MenuItemResponse;
+import com.whoami.milkcheque.dto.response.StoreInfo;
 import com.whoami.milkcheque.service.StoreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,24 +13,19 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/store")
 public class StoreController {
-
-    private final StoreService storService;
-    public StoreController(StoreService storService) {
-        this.storService = storService;
-    }
-
-    @GetMapping("/menu")
-    public ResponseEntity<ArrayList<MenuItemDTO>> getMenu(@RequestParam int storeId, @RequestParam int tableId) {
-        return storService.getMenuItems(storeId, tableId);
-
-
+    @Autowired
+    private final StoreService storeService;
+    public StoreController(StoreService storeService) {
+        this.storeService = storeService;
     }
 
     @GetMapping("/info")
-    public ResponseEntity<StoreInfo> getStoreInfo(@RequestParam Long storeId) {
-        return storService.getStoreInfo(storeId);
-
+    public ResponseEntity<StoreInfo> getStoreInfo(@RequestParam Long storeId, @RequestParam Long tableId) {
+        return storeService.getStoreInfo(storeId, tableId);
     }
 
-
+    @GetMapping("/menu")
+    public ResponseEntity<ArrayList<MenuItemResponse>> getMenu(@RequestParam Long storeId) {
+        return storeService.getMenuItems(storeId);
+    }
 }

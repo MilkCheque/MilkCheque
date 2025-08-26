@@ -1,7 +1,7 @@
 package com.whoami.milkcheque.exception;
 
 import com.whoami.milkcheque.dto.ErrorModel;
-import com.whoami.milkcheque.dto.LoginResponse;
+import com.whoami.milkcheque.dto.response.LoginResponse;
 import com.whoami.milkcheque.dto.response.SignUpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

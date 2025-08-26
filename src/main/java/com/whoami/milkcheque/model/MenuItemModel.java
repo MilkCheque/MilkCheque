@@ -26,8 +26,8 @@ public class MenuItemModel {
     private byte[] menuItemImage;
 
     @ManyToOne
-    @JoinColumn(name="menu_id")
-    private MenuModel menuModel;
+    @JoinColumn(name="store_id")
+    private StoreModel storeModel;
 
     @ManyToMany(mappedBy = "menuItems")
     private Set<CustomerOrderModel> customerOrders = new HashSet<>();

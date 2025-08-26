@@ -1,7 +1,7 @@
 package com.whoami.milkcheque.validation;
 
 import com.whoami.milkcheque.dto.request.SignUpRequest;
-import com.whoami.milkcheque.dto.LoginRequest;
+import com.whoami.milkcheque.dto.request.LoginRequest;
 import com.whoami.milkcheque.exception.*;
 import com.whoami.milkcheque.model.StaffModel;
 import com.whoami.milkcheque.repository.StaffRepository;

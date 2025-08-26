@@ -21,12 +21,18 @@ public class StoreModel {
 
     @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL ,orphanRemoval = true)
     private List<StaffModel> staffList=new ArrayList<>();
+
     @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<TableModel> TableList=new ArrayList<>();
+    private List<TableModel> tableList=new ArrayList<>();
+
     @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<MenuModel> MenuList=new ArrayList<>();
+    private List<MenuModel> menuList=new ArrayList<>();
+
     @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<SessionModel> SessionList=new ArrayList<>();
+    private List<SessionModel> sessionList=new ArrayList<>();
+
+    @OneToMany(mappedBy = "storeModel",cascade = CascadeType.ALL ,orphanRemoval = true )
+    private List<MenuItemModel> menuItemList=new ArrayList<>();
 
 
 }

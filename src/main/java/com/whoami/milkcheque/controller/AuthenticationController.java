@@ -3,8 +3,8 @@ package com.whoami.milkcheque.controller;
 import com.whoami.milkcheque.service.AuthenticationService;
 import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.dto.response.SignUpResponse;
-import com.whoami.milkcheque.dto.LoginRequest;
-import com.whoami.milkcheque.dto.LoginResponse;
+import com.whoami.milkcheque.dto.request.LoginRequest;
+import com.whoami.milkcheque.dto.response.LoginResponse;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;

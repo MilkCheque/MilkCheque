@@ -1,12 +1,12 @@
 package com.whoami.milkcheque.service;
 
-import com.whoami.milkcheque.mapper.StaffMapper;
+import com.whoami.milkcheque.mapper.Mapper;
 import com.whoami.milkcheque.model.StaffModel;
 import com.whoami.milkcheque.repository.StaffRepository;
 import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.dto.response.SignUpResponse;
-import com.whoami.milkcheque.dto.LoginRequest;
-import com.whoami.milkcheque.dto.LoginResponse;
+import com.whoami.milkcheque.dto.request.LoginRequest;
+import com.whoami.milkcheque.dto.response.LoginResponse;
 import com.whoami.milkcheque.validation.AuthenticationValidation;
 import com.whoami.milkcheque.exception.*;
 
@@ -19,7 +19,7 @@ public class AuthenticationService {
     private final StaffRepository staffRepository;
     private final AuthenticationValidation authenticationValidation ;
 
-    StaffMapper staffMapper = new StaffMapper();
+    Mapper staffMapper = new Mapper();
 
     private AuthenticationService(StaffRepository staffRepository, AuthenticationValidation authenticationValidation) {
         this.staffRepository = staffRepository;
@@ -29,7 +29,7 @@ public class AuthenticationService {
     public ResponseEntity<SignUpResponse> signUpProcess(SignUpRequest signUpRequest) {
         try {
             signUpValidation(signUpRequest);
-            StaffModel staffModel = staffMapper.convertToEntity(signUpRequest);
+            StaffModel staffModel = staffMapper.convertStaffDTOToModel(signUpRequest);
             staffRepository.save(staffModel);
             return ResponseEntity.status(HttpStatus.CREATED).body(new SignUpResponse("0", "created"));
         } catch(Exception e) {

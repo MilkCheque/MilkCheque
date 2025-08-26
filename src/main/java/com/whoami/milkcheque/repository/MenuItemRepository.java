@@ -8,5 +8,5 @@ import java.util.ArrayList;
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItemModel, Long> {
 
-    ArrayList<MenuItemModel> findByMenuModel_MenuId(Long menuId);
+    ArrayList<MenuItemModel> findByStoreModel_StoreId(Long storeId);
 }

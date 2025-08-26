@@ -1,10 +1,10 @@
-package com.whoami.milkcheque.dto;
+package com.whoami.milkcheque.dto.response;
 
 
 import lombok.Data;
 
 @Data
-public class MenuItemDTO {
+public class MenuItemResponse {
     private Long menuItemId;
     private String menuItemName;
     private Double price;
