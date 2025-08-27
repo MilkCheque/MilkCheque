@@ -13,7 +13,6 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/store")
 public class StoreController {
-    @Autowired
     private final StoreService storeService;
     public StoreController(StoreService storeService) {
         this.storeService = storeService;

@@ -1,12 +1,10 @@
 package com.whoami.milkcheque.mapper;
 
+import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
 import com.whoami.milkcheque.dto.request.SignUpRequest;
-import com.whoami.milkcheque.model.MenuItemModel;
-import com.whoami.milkcheque.model.StaffModel;
-import com.whoami.milkcheque.model.StoreModel;
-import com.whoami.milkcheque.model.TableModel;
+import com.whoami.milkcheque.model.*;
 
 public class Mapper {
 
@@ -56,4 +54,13 @@ public class Mapper {
         storeInfo.setTableId(tableId);
         return storeInfo;
     }
+
+    public CustomerModel convertCustomerRequestToCustomerModel(CustomerRequest customerRequest) {
+        CustomerModel customerModel = new CustomerModel();
+        customerModel.setCustomerName(customerRequest.getCustomerName());
+        customerModel.setCustomerPhoneNumber(customerRequest.getPhoneNumber());
+        return customerModel;
+    }
+
+
 }

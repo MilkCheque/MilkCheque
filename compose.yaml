@@ -5,7 +5,7 @@ services:
     environment:
       - MYSQL_USER=${SQL_USER}
       - MYSQL_PASSWORD=${SQL_PASS}
-      - MYSQL_ROOT_PASSWORD=${SQL_ROOT}
+      - MYSQL_ROOT_PASSWORD=ayoy
     ports:
       - 3306:3306
     volumes:

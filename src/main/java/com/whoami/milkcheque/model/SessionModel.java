@@ -13,8 +13,9 @@ import java.util.Set;
 @Table(name = "session")
 public class SessionModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "session_id")
-    private String sessionId;
+    private Long sessionId;
     @ManyToOne
     @JoinColumn(name="store_id")
     private StoreModel storeModel;
@@ -28,4 +29,7 @@ public class SessionModel {
     private List<CustomerOrderModel> CustomerOrderList=new ArrayList<>();
     @ManyToMany(mappedBy = "customerSessions")
     private Set<CustomerModel> sessionSet=new HashSet<>();
+
+    public void setCutomerModel(Long customerId) {
+    }
 }

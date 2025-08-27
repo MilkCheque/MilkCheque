@@ -34,7 +34,7 @@ public class StoreService {
     }
 
     public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItems(Long storeId) {
-//        try{
+        try{
             ArrayList<MenuItemModel> menuItems = menuItemRepository.findByStoreModel_StoreId(storeId);
             ArrayList<MenuItemResponse> menuItemsDTO = new ArrayList<>();
             Mapper mapper = new Mapper();
@@ -45,15 +45,15 @@ public class StoreService {
                 menuItemsDTO.add(mapper.convertMenuItemModelToDto(menuItem));
             }
             return ResponseEntity.status(HttpStatus.OK) .body(menuItemsDTO);
-//        }
+        }
 
-//        catch (Exception e) {
-//            throw new MenuItemRetrievalException("unexpected error （￣へ￣）");
-//        }
+        catch (Exception e) {
+            throw new MenuItemRetrievalException("unexpected error （￣へ￣）");
+        }
     }
 
     public ResponseEntity<StoreInfo> getStoreInfo(Long storeId, Long tableId) {
-//        try{
+        try{
             StoreModel storeModel= storeRepository.getStoreModelByStoreId(storeId);
             if(storeModel == null) {
                 throw new StoreInfoRetrievalException("Store not found (⸝⸝๑﹏๑⸝⸝)");
@@ -63,10 +63,10 @@ public class StoreService {
             activateTable(tableId);
             return ResponseEntity.status(HttpStatus.OK).body(storeInfo);
 
-//        }
-//        catch (Exception e) {
-//            throw new StoreInfoRetrievalException("Unexpected error （￣へ￣）");
-//        }
+        }
+        catch (Exception e) {
+            throw new StoreInfoRetrievalException("Unexpected error （￣へ￣）");
+        }
     }
 
     public void activateTable(Long tableId){
