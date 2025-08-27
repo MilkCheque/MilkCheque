@@ -24,7 +24,7 @@ public class CustomerModel {
     private List<CustomerOrderModel> CustomerOrderList=new ArrayList<>();
     @ManyToMany
     @JoinTable(
-            name = "customer_order",
+            name = "session_customer",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "session_id")
     )

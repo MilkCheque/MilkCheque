@@ -14,4 +14,6 @@ public interface TableRepository extends JpaRepository<TableModel, Long> {
     @Transactional
     @Query(nativeQuery = true, value = "update store_table t set t.is_active=true where t.store_table_id=:tableId ")
     void activateTable(@Param("tableId") Long tableId);
+
+    TableModel findByStoreTableId(Long tableId);
 }

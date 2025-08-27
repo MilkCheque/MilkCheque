@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.validation;
 
+import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.dto.request.LoginRequest;
 import com.whoami.milkcheque.exception.*;
@@ -122,5 +123,10 @@ public class AuthenticationValidation {
           throw new AuthenticationFailureException("-1",
               "email or password don't match");
 
+    }
+
+    public void validateCustomerRequest(CustomerRequest customerRequest) {
+        nameValidation(customerRequest.getCustomerName());
+        phoneNumberValidation(customerRequest.getPhoneNumber());
     }
 }
