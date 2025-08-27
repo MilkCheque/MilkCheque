@@ -4,5 +4,5 @@ import com.whoami.milkcheque.model.SessionModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SessionRepository extends JpaRepository<SessionModel, Long> {
-    boolean existsByTableModel_TableId(Long tableId);
+    boolean existsByTableModel_StoreTableId(Long storeTableId);
 }

@@ -14,7 +14,7 @@ public class TableModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="store_table_id")
-    private Long tableId;
+    private Long storeTableId;
     @Column(name= "is_active")
     private boolean isActive;
 
