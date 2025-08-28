@@ -1,0 +1,31 @@
+services:
+#  db:
+#    image: mysql:8.0
+#    container_name: mysql
+#    environment:
+##      - MYSQL_DATABASE=mydb
+##      - MYSQL_USER=${SQL_USER}
+##      - MYSQL_PASSWORD=${SQL_PASS}
+#       - MYSQL_DATABASE=milk
+#       - MYSQL_USER=MCadmin
+#       - MYSQL_PASSWORD=m1lkCh3que
+#       - MYSQL_ROOT_PASSWORD=root
+#    ports:
+#      - 3306:3306
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: springboot-app
+#    depends_on:
+#      - db
+    environment:
+       SPRING_DATASOURCE_URL: "jdbc:mysql://milkcheque.mysql.database.azure.com:3306/milk?useSSL=true&requireSSL=true&verifyServerCertificate=false"
+       SPRING_DATASOURCE_USERNAME: MCadmin
+       SPRING_DATASOURCE_PASSWORD: m1lkCh3que
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql_data:
