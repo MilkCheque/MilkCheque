@@ -1,14 +1,14 @@
 package com.whoami.milkcheque.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-
+import lombok.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "customer")
 public class CustomerModel {
@@ -29,7 +29,4 @@ public class CustomerModel {
             inverseJoinColumns = @JoinColumn(name = "session_id")
     )
     private Set<SessionModel> customerSessions = new HashSet<>();
-
 }
-
-

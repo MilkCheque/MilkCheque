@@ -12,9 +12,10 @@ import com.whoami.milkcheque.repository.CustomerRepository;
 import com.whoami.milkcheque.repository.SessionRepository;
 import com.whoami.milkcheque.repository.TableRepository;
 import com.whoami.milkcheque.validation.AuthenticationValidation;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class SessionSerivce {
@@ -40,6 +41,7 @@ public class SessionSerivce {
             CustomerModel customerModel = mapper.convertCustomerRequestToCustomerModel(customerRequest);
             customerRepository.save(customerModel);
             String token = null;
+            createSession(customerRequest.getTableId(),customerModel.getCustomerId());
 
             return ResponseEntity.ok().body(new LoginResponse("1","login success",token));
         }
@@ -52,26 +54,33 @@ public class SessionSerivce {
     private void customerLoginValidation(CustomerRequest customerRequest)  {
         authenticationValidation.validateCustomerRequest(customerRequest);
     }
-//
-//    private void createSession(Long tableId, Long customerId){
-//        boolean isTableIdExists=sessionRepository.existsById(tableId);
-//        if(isTableIdExists){
-//            addCustomerToSession(customerId,tableId);
-//            return;
-//        }
-//        SessionModel sessionModel = new SessionModel();
-//        TableModel tableModel =tableRepository.findById(tableId).get();
-//        CustomerModel customerModel = customerRepository.findById(customerId).get();
-//        sessionModel.setCutomerModel(customerId);
-//        sessionModel.setTableModel(tableModel);
-//
-//
-//
-//
-//    }
-//
-//    private void addCustomerToSession(Long tableId, Long customerId, Long sessionId) {
-//
-//    }
+
+    private void createSession(Long tableId, Long customerId){
+        boolean isTableIdExists=sessionRepository.existsById(tableId);
+        Optional<SessionModel> optionalSessionModel =sessionRepository.findByTableModel_TableId(tableId);
+        if(optionalSessionModel.isPresent()){
+            addCustomerToSession(customerId,tableId);
+            return;
+        }
+        SessionModel sessionModel = new SessionModel();
+        TableModel tableModel =tableRepository.findById(tableId).get();
+        CustomerModel customerModel = customerRepository.findById(customerId).get();
+//        customerModel.getCustomerSessions().add(sessionModel);
+        sessionModel.getSessionSet().add(customerModel);
+        sessionModel.setTableModel(tableModel);
+        sessionRepository.save(sessionModel);
+        customerModel.getCustomerSessions().add(sessionModel);
+        customerRepository.save(customerModel);
+    }
+
+    private void addCustomerToSession(Long tableId, Long customerId) {
+        SessionModel sessionModel = sessionRepository.getByTableModel_TableId(tableId);
+        CustomerModel customerModel = customerRepository.findById(customerId).get();
+        sessionModel.getSessionSet().add(customerModel);
+        sessionRepository.save(sessionModel);
+        customerModel.getCustomerSessions().add(sessionModel);
+        customerRepository.save(customerModel);
+
+    }
 
 }
