@@ -54,4 +54,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(exception.getMessage());
     }
+
+    @ExceptionHandler(AddOrderPatchFailureException.class)
+    public ResponseEntity<Object> handleAddOrderPatchFailureException(
+            AddOrderPatchFailureException exception) {
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(exception.getMessage());
+    }
 }

@@ -4,7 +4,6 @@ package com.whoami.milkcheque.controller;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
 import com.whoami.milkcheque.service.StoreService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

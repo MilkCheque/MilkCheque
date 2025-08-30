@@ -1,32 +1,58 @@
 package com.whoami.milkcheque.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import java.util.ArrayList;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "CustomerModel")
 @Table(name = "customer")
 public class CustomerModel {
+    //TODO: Use sequence generator
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private Long CustomerId;
-    @Column(name = "customer_name")
-    private String customerName;
-    @Column(name = "customer_phone_number")
-    private String customerPhoneNumber;
-    @OneToMany(mappedBy="customerModel",cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<CustomerOrderModel> CustomerOrderList=new ArrayList<>();
-    @ManyToMany
-    @JoinTable(
-            name = "session_customer",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "session_id")
+
+    @Column(
+        name = "customer_first_name",
+        unique = false,
+        nullable = false
     )
+    private String customerFirstName;
+
+    @Column(
+        name = "customer_last_name",
+        unique = false,
+        nullable = false
+    )
+    private String customerLastName;
+
+    @Column(
+        name = "customer_phone",
+        unique = true,
+        nullable = false
+    )
+    private String customerPhone;
+
+    @Column(
+        name = "customer_password",
+        unique = false,
+        nullable = false
+    )
+    private String customerPassword;
+
+    @OneToMany(
+        mappedBy="customerModel",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private Set<CustomerOrderModel> ordersSet = new HashSet<>();
+
+    @ManyToMany(mappedBy = "sessionCustomers")
     private Set<SessionModel> customerSessions = new HashSet<>();
 }

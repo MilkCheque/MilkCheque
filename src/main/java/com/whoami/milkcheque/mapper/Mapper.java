@@ -11,21 +11,23 @@ public class Mapper {
     public StaffModel convertStaffDTOToModel(SignUpRequest signUpRequest) {
         StaffModel staffModel = new StaffModel();
 
-        staffModel.setName(signUpRequest.getName());
-        staffModel.setEmail(signUpRequest.getEmail());
-        staffModel.setDateOfBirth(signUpRequest.getDateOfBirth());
-        staffModel.setPhoneNumber(signUpRequest.getPhoneNumber());
-        staffModel.setPassword(signUpRequest.getPassword());
+        staffModel.setStaffFirstName(signUpRequest.getFirstName());
+        staffModel.setStaffLastName(signUpRequest.getLastName());
+        staffModel.setStaffEmail(signUpRequest.getEmail());
+        staffModel.setStaffDOB(signUpRequest.getDOB());
+        staffModel.setStaffPhone(signUpRequest.getPhone());
+        staffModel.setStaffPassword(signUpRequest.getPassword());
         return staffModel;
     }
 
     public SignUpRequest convertStaffModelToDto(StaffModel staffModel) {
         SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setName(staffModel.getName());
-        signUpRequest.setEmail(staffModel.getEmail());
-        signUpRequest.setDateOfBirth(staffModel.getDateOfBirth());
-        signUpRequest.setPhoneNumber(staffModel.getPhoneNumber());
-        signUpRequest.setPassword(staffModel.getPassword());
+        signUpRequest.setFirstName(staffModel.getStaffFirstName());
+        signUpRequest.setLastName(staffModel.getStaffLastName());
+        signUpRequest.setEmail(staffModel.getStaffEmail());
+        signUpRequest.setDOB(staffModel.getStaffDOB());
+        signUpRequest.setPhone(staffModel.getStaffPhone());
+        signUpRequest.setPassword(staffModel.getStaffPassword());
         return signUpRequest;
     }
 
@@ -57,8 +59,9 @@ public class Mapper {
 
     public CustomerModel convertCustomerRequestToCustomerModel(CustomerRequest customerRequest) {
         CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerName(customerRequest.getCustomerName());
-        customerModel.setCustomerPhoneNumber(customerRequest.getPhoneNumber());
+        customerModel.setCustomerFirstName(customerRequest.getFirstName());
+        customerModel.setCustomerLastName(customerRequest.getLastName());
+        customerModel.setCustomerPhone(customerRequest.getPhone());
         return customerModel;
     }
 

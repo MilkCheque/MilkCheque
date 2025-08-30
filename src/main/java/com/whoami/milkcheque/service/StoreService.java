@@ -8,9 +8,8 @@ import com.whoami.milkcheque.mapper.Mapper;
 import com.whoami.milkcheque.model.MenuItemModel;
 import com.whoami.milkcheque.model.StoreModel;
 import com.whoami.milkcheque.repository.MenuItemRepository;
-import com.whoami.milkcheque.repository.MenuRepository;
 import com.whoami.milkcheque.repository.StoreRepository;
-import com.whoami.milkcheque.repository.TableRepository;
+import com.whoami.milkcheque.repository.StoreTableRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,14 +19,12 @@ import java.util.ArrayList;
 @Service
 public class StoreService {
 
-    private final MenuRepository menuRepository;
     private final MenuItemRepository menuItemRepository;
     private final StoreRepository storeRepository;
-    private final TableRepository tableRepository;
+    private final StoreTableRepository tableRepository;
 
     //    private final MenuItemDTO menuItemDTO;
-    public StoreService(MenuRepository menuRepository, MenuItemRepository menuItemRepository, StoreRepository storeRepository, TableRepository tableRepository) {
-        this.menuRepository = menuRepository;
+    public StoreService(MenuItemRepository menuItemRepository, StoreRepository storeRepository, StoreTableRepository tableRepository) {
         this.menuItemRepository = menuItemRepository;
         this.storeRepository = storeRepository;
         this.tableRepository = tableRepository;

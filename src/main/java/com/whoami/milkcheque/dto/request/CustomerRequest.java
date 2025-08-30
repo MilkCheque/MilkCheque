@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class CustomerRequest {
-    private String customerName;
-    private String phoneNumber;
+    private String firstName;
+    private String lastName;
+    private String phone;
     private Long tableId;
 }

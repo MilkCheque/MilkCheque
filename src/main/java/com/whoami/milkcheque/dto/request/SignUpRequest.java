@@ -8,9 +8,10 @@ import java.time.LocalDate;
 public class SignUpRequest {
 //    @EMailValidation
     private Long    id;
-    private String  name;
+    private String  firstName;
+    private String  lastName;
     private String  email;
-    private LocalDate dateOfBirth;
-    private String  phoneNumber;
+    private LocalDate DOB;
+    private String  phone;
     private String  password;
 }

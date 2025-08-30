@@ -3,36 +3,68 @@ package com.whoami.milkcheque.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@Entity
+@Entity(name = "StoreModel")
 @Table(name = "store")
 public class StoreModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="store_id")
     private Long storeId;
-    @Column(name ="store_name")
+
+    @Column(
+        name = "store_name",
+        unique = false,
+        nullable = false
+    )
     private String storeName;
-    @Column(name = "store_location")
+
+    @Column(
+        name = "store_location",
+        unique = false,
+        nullable = false
+    )
     private String storeLocation;
 
-    @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<StaffModel> staffList=new ArrayList<>();
+    @Lob
+    @Column(name = "store_logo")
+    private String storeLogo;
 
-    @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<TableModel> tableList=new ArrayList<>();
+    @OneToMany(
+        mappedBy = "storeModel",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private Set<StaffModel> staffList = new HashSet<>();
 
-    @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<MenuModel> menuList=new ArrayList<>();
+    @OneToMany(
+        mappedBy = "storeModel",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private Set<StoreTableModel> tableList = new HashSet<>();
 
-    @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<SessionModel> sessionList=new ArrayList<>();
+    @OneToMany(
+        mappedBy = "storeModel",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private Set<MenuItemModel> menuItemsList = new HashSet<>();
 
-    @OneToMany(mappedBy = "storeModel",cascade = CascadeType.ALL ,orphanRemoval = true )
-    private List<MenuItemModel> menuItemList=new ArrayList<>();
+    @OneToMany(
+        mappedBy = "storeModel",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private Set<SessionModel> sessionList = new HashSet<>();
 
-
+    @OneToMany(
+        mappedBy = "storeModel",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private Set<MenuItemModel> menuItemList = new HashSet<>();
 }

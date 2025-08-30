@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Entity
+@Entity(name = "CustomerOrderModel")
 @Table(name="customer_order")
 public class CustomerOrderModel {
     @Id
@@ -22,12 +22,10 @@ public class CustomerOrderModel {
     @JoinColumn(name="session_id")
     private SessionModel sessionModel;
 
-    @ManyToMany
-    @JoinTable(
-            name = "order_item",
-            joinColumns = @JoinColumn(name = "customer_order_id"),
-            inverseJoinColumns = @JoinColumn(name = "mitem_id")
+    @OneToMany(
+        mappedBy="customerOrderModel",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
     )
-    private Set<MenuItemModel> menuItems = new HashSet<>();
-
+    private Set<OrderItemModel> orderItemsSet = new HashSet<>();
 }

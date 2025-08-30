@@ -1,6 +1,7 @@
 package com.whoami.milkcheque.validation;
 
 import com.whoami.milkcheque.dto.request.CustomerRequest;
+import com.whoami.milkcheque.dto.request.CustomerOrderPatchRequest;
 import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.dto.request.LoginRequest;
 import com.whoami.milkcheque.exception.*;
@@ -82,23 +83,25 @@ public class AuthenticationValidation {
     }
 
     public boolean emailExist(String email) throws Exception {
-        Optional<StaffModel> staffModel = staffRepository.findByEmail(email);
+        Optional<StaffModel> staffModel = staffRepository.findByStaffEmail(email);
         return staffModel.isPresent();
     }
 
     public boolean phoneNumberExist(String phoneNumber) {
         String message = null;
-        Optional<StaffModel> staffModel = staffRepository.findByPhoneNumber(
+        Optional<StaffModel> staffModel = staffRepository.findByStaffPhone(
               phoneNumber);
         return staffModel.isPresent();
     }
 
     public void validateStaffSignup(SignUpRequest signUpRequest) {
         String message = null;
-        nameValidation(signUpRequest.getName());
+        //TODO: Distinguish errors
+        nameValidation(signUpRequest.getFirstName());
+        nameValidation(signUpRequest.getLastName());
         emailValidation(signUpRequest.getEmail());
         //TODO: Validate DOB
-        phoneNumberValidation(signUpRequest.getPhoneNumber());
+        phoneNumberValidation(signUpRequest.getPhone());
         passwordValidation(signUpRequest.getPassword());
         emailValidation(signUpRequest.getEmail());
         try {
@@ -116,9 +119,9 @@ public class AuthenticationValidation {
         emailValidation(loginRequest.getEmail());
         if (loginRequest.getPassword() == null)
           throw new AuthenticationFormatException("-1", "password is null");
-        Optional<StaffModel> staffModel = staffRepository .findByEmail(loginRequest .getEmail());
+        Optional<StaffModel> staffModel = staffRepository.findByStaffEmail(loginRequest .getEmail());
         if (!staffModel.isPresent() || 
-            !staffModel.get().getPassword().
+            !staffModel.get().getStaffPassword().
             equals(loginRequest.getPassword()))
           throw new AuthenticationFailureException("-1",
               "email or password don't match");
@@ -126,7 +129,15 @@ public class AuthenticationValidation {
     }
 
     public void validateCustomerRequest(CustomerRequest customerRequest) {
-        nameValidation(customerRequest.getCustomerName());
-        phoneNumberValidation(customerRequest.getPhoneNumber());
+        nameValidation(customerRequest.getFirstName());
+        nameValidation(customerRequest.getLastName());
+        phoneNumberValidation(customerRequest.getPhone());
     }
+
+    public void validateOrderPatchRequest(
+            CustomerOrderPatchRequest customerOrderPatchRequest) {
+        //TODO: NOT IMPLEMENTED
+        return;
+    }
+
 }

@@ -1,11 +1,8 @@
 package com.whoami.milkcheque.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -16,17 +13,47 @@ public class StaffModel {
     @Column(name="staff_id")
     private Long id;
 
-    @Column(name="staff_name")
-    private String name;
+    @Column(
+        name="staff_first_name",
+        unique = false,
+        nullable = false
+    )
+    private String staffFirstName;
 
-    @Column(name="staff_email")
-    private String email;
-    @Column(name="staff_dob")
-    private LocalDate dateOfBirth;
-    @Column(name="staff_password")
-    private String password;
-    @Column(name="staff_phone_number")
-    private String phoneNumber;
+    @Column(
+        name="staff_last_name",
+        unique = false,
+        nullable = false
+    )
+    private String staffLastName;
+
+    @Column(
+        name="staff_email",
+        unique = true,
+        nullable = false
+    )
+    private String staffEmail;
+
+    @Column(
+        name="staff_dob",
+        unique = false,
+        nullable = false
+    )
+    private LocalDate staffDOB;
+
+    @Column(
+        name="staff_password",
+        unique = false,
+        nullable = false
+    )
+    private String staffPassword;
+
+    @Column(
+        name="staff_phone",
+        unique = true,
+        nullable = false
+    )
+    private String staffPhone;
 
     @ManyToOne
     @JoinColumn(name="store_id")
