@@ -6,5 +6,5 @@ import lombok.Data;
 public class CustomerRequest {
     private String customerName;
     private String phoneNumber;
-    private String tableId;
+    private Long tableId;
 }

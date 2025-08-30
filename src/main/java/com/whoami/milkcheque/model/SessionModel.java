@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,15 +20,17 @@ public class SessionModel {
     @ManyToOne
     @JoinColumn(name="store_id")
     private StoreModel storeModel;
-    @ManyToOne
-    @JoinColumn(name="menu_id")
-    private MenuModel menuModel;
+//    @ManyToOne
+//    @JoinColumn(name="menu_id")
+//    private MenuModel menuModel;
     @ManyToOne
     @JoinColumn(name="store_table_id")
     private TableModel tableModel;
     @OneToMany(mappedBy="sessionModel",cascade = CascadeType.ALL ,orphanRemoval = true)
     private List<CustomerOrderModel> CustomerOrderList=new ArrayList<>();
+
     @ManyToMany(mappedBy = "customerSessions")
+    @JsonIgnore
     private Set<CustomerModel> sessionSet=new HashSet<>();
 
     public void setCutomerModel(Long customerId) {
