@@ -5,24 +5,21 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="order_item")
+@Table(name = "order_item")
 public class OrderItemModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_item_id")
-    private String orderItemId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "order_item_id")
+  private String orderItemId;
 
-    @ManyToOne
-    @JoinColumn(name="customer_order_id")
-    private CustomerOrderModel customerOrderModel;
+  @ManyToOne
+  @JoinColumn(name = "customer_order_id")
+  private CustomerOrderModel customerOrderModel;
 
-    @ManyToOne
-    @JoinColumn(name="mitem_id")
-    private MenuItemModel menuItemModel;
+  @ManyToOne
+  @JoinColumn(name = "mitem_id")
+  private MenuItemModel menuItemModel;
 
-    @Column(
-      name = "quantity",
-      nullable = false
-    )
-    private Long quantity;
+  @Column(name = "quantity", nullable = false)
+  private Long quantity;
 }
