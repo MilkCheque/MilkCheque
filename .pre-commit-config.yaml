@@ -1,0 +1,14 @@
+default_stages: [pre-commit]
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+-   repo: local
+    hooks:
+    -   id: google-java-foramt
+        name: google-java-format
+        entry: contrib/ci/google-java-format
+        language: system
