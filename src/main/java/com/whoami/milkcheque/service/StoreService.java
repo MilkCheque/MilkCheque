@@ -45,7 +45,7 @@ public class StoreService {
         }
 
         catch (Exception e) {
-            throw new MenuItemRetrievalException("unexpected error （￣へ￣）");
+            throw new MenuItemRetrievalException("unexpected error （￣へ￣）"+ e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class StoreService {
 
         }
         catch (Exception e) {
-            throw new StoreInfoRetrievalException("Unexpected error （￣へ￣）");
+            throw new StoreInfoRetrievalException("Unexpected error （￣へ￣）"+ e.getMessage());
         }
     }
 

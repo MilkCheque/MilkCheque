@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface StoreTableRepository extends JpaRepository<StoreTableModel, Long> {
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value = "update store_table t set t.is_active=true where t.store_table_id=:tableId ")
+    @Query(nativeQuery = true, value = "update store_table t set t.is_active=true where t.store_table_id=:storeTableId ")
     void activateTable(@Param("storeTableId") Long storeTableId);
 
     StoreTableModel findByStoreTableId(Long tableId);

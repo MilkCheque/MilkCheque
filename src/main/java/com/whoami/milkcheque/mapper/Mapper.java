@@ -62,6 +62,8 @@ public class Mapper {
         customerModel.setCustomerFirstName(customerRequest.getFirstName());
         customerModel.setCustomerLastName(customerRequest.getLastName());
         customerModel.setCustomerPhone(customerRequest.getPhone());
+        customerModel.setCustomerDOB(customerRequest.getCustomerDOB());
+        customerModel.setCustomerPassword(customerRequest.getCustomerPassword());
         return customerModel;
     }
 
