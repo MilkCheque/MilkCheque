@@ -11,6 +11,7 @@ import java.util.Set;
 @Table(name="customer_order")
 public class CustomerOrderModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_order_id")
     private String customerOrderId;
 

@@ -8,6 +8,7 @@ import lombok.Data;
 @Table(name="order_item")
 public class OrderItemModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
     private String orderItemId;
 
@@ -23,5 +24,5 @@ public class OrderItemModel {
       name = "quantity",
       nullable = false
     )
-    private Integer quantity;
+    private Long quantity;
 }
