@@ -36,3 +36,4 @@ jobs:
           app-name: 'MilkChequeWebApp'
           slot-name: 'Production'
           images: 'milkchequeregistry.azurecr.io/milkcheque:latest'
+
