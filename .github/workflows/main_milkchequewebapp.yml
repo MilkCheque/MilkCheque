@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      
+
       - name: Azure Container Registry Login
         uses: azure/docker-login@v1
         with:
@@ -22,13 +22,13 @@ jobs:
           username: ${{ secrets.AZURE_ACR_USERNAME }}
           password: ${{ secrets.AZURE_ACR_PASSWORD }}
 
-      
+
       - name: Build and Push Docker image
         run: |
           docker build -t milkchequeregistry.azurecr.io/milkcheque:latest .
           docker push milkchequeregistry.azurecr.io/milkcheque:latest
 
-     
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
@@ -36,4 +36,3 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           images: 'milkchequeregistry.azurecr.io/milkcheque:latest'
-

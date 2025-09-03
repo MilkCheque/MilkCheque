@@ -38,14 +38,14 @@ public class StoreService {
       ArrayList<MenuItemResponse> menuItemsDTO = new ArrayList<>();
       Mapper mapper = new Mapper();
       if (menuItems.isEmpty()) {
-        throw new MenuItemRetrievalException("Menu items not found (⸝⸝๑﹏๑⸝⸝)");
+        throw new MenuItemRetrievalException("-1", "Menu items not found (⸝⸝๑﹏๑⸝⸝)");
       }
       for (MenuItemModel menuItem : menuItems) {
         menuItemsDTO.add(mapper.convertMenuItemModelToDto(menuItem));
       }
       return ResponseEntity.status(HttpStatus.OK).body(menuItemsDTO);
     } catch (Exception e) {
-      throw new MenuItemRetrievalException("unexpected error （￣へ￣）" + e.getMessage());
+      throw new MenuItemRetrievalException("-2", "unexpected error （￣へ￣）" + e.getMessage());
     }
   }
 

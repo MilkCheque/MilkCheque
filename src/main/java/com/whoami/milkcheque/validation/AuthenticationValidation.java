@@ -1,6 +1,5 @@
 package com.whoami.milkcheque.validation;
 
-import com.whoami.milkcheque.dto.request.CustomerOrderPatchRequest;
 import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.request.LoginRequest;
 import com.whoami.milkcheque.dto.request.SignUpRequest;
@@ -107,10 +106,5 @@ public class AuthenticationValidation {
     nameValidation(customerRequest.getFirstName());
     nameValidation(customerRequest.getLastName());
     phoneNumberValidation(customerRequest.getPhone());
-  }
-
-  public void validateOrderPatchRequest(CustomerOrderPatchRequest customerOrderPatchRequest) {
-
-    return;
   }
 }

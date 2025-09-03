@@ -16,7 +16,7 @@ public class CustomerModel {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "customer_id")
-  private Long CustomerId;
+  private Long customerId;
 
   @Column(name = "customer_first_name", unique = false, nullable = false)
   private String customerFirstName;
@@ -38,4 +38,9 @@ public class CustomerModel {
 
   @ManyToMany(mappedBy = "sessionCustomers")
   private Set<SessionModel> customerSessions = new HashSet<>();
+
+  @Override
+  public int hashCode() {
+    return customerId == null ? 0 : customerId.hashCode();
+  }
 }

@@ -38,4 +38,17 @@ public class StoreModel {
 
   @OneToMany(mappedBy = "storeModel", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<MenuItemModel> menuItemList = new HashSet<>();
+
+  @Override
+  public int hashCode() {
+    return storeId != null ? storeId.hashCode() : 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    StoreModel storeModel = (StoreModel) o;
+    return this.storeId.equals(storeModel.getStoreId());
+  }
 }

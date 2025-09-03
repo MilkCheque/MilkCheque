@@ -5,7 +5,9 @@ import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.response.CustomerOrderPatchResponse;
 import com.whoami.milkcheque.dto.response.LoginResponse;
 import com.whoami.milkcheque.exception.AddOrderPatchFailureException;
+import com.whoami.milkcheque.exception.InvalidRequest;
 import com.whoami.milkcheque.exception.LoginProcessFailureException;
+import com.whoami.milkcheque.exception.MenuItemRetrievalException;
 import com.whoami.milkcheque.mapper.Mapper;
 import com.whoami.milkcheque.model.CustomerModel;
 import com.whoami.milkcheque.model.CustomerOrderModel;
@@ -22,6 +24,8 @@ import com.whoami.milkcheque.repository.SessionRepository;
 import com.whoami.milkcheque.repository.StoreRepository;
 import com.whoami.milkcheque.repository.StoreTableRepository;
 import com.whoami.milkcheque.validation.AuthenticationValidation;
+import com.whoami.milkcheque.validation.CustomerOrderRequestValidation;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +36,7 @@ import org.springframework.stereotype.Service;
 public class SessionSerivce {
   StoreRepository storeRepository;
   AuthenticationValidation authenticationValidation;
+  CustomerOrderRequestValidation customerOrderRequestValidation;
   CustomerRepository customerRepository;
   CustomerOrderRepository customerOrderRepository;
   SessionRepository sessionRepository;
@@ -41,6 +46,7 @@ public class SessionSerivce {
 
   SessionSerivce(
       AuthenticationValidation authenticationValidation,
+      CustomerOrderRequestValidation customerOrderRequestValidation,
       CustomerRepository customerRepository,
       CustomerOrderRepository customerOrderRepository,
       SessionRepository sessionRepository,
@@ -49,6 +55,7 @@ public class SessionSerivce {
       OrderItemRepository orderItemRepository,
       MenuItemRepository menuItemRepository) {
     this.authenticationValidation = authenticationValidation;
+    this.customerOrderRequestValidation = customerOrderRequestValidation;
     this.customerRepository = customerRepository;
     this.customerOrderRepository = customerOrderRepository;
     this.sessionRepository = sessionRepository;
@@ -61,7 +68,7 @@ public class SessionSerivce {
   public ResponseEntity<CustomerOrderPatchResponse> addOrderPatch(
       CustomerOrderPatchRequest customerOrderPatchRequest) {
     try {
-      validateOrderPatchRequest(customerOrderPatchRequest);
+      customerOrderRequestValidation.validateOrderPatchRequest(customerOrderPatchRequest);
 
       Long customerId = customerOrderPatchRequest.getCustomerId();
       Long sessionId = customerOrderPatchRequest.getSessionId();
@@ -81,14 +88,13 @@ public class SessionSerivce {
       for (Map.Entry<Long, Long> item : orderItems.entrySet()) {
         Long itemId = item.getKey();
         Long itemQuantity = item.getValue();
-        // TODO: Make sure store_id matches after finding
         Optional<MenuItemModel> menuItem = menuItemRepository.findById(itemId);
-        // This check can probalby be removed if we rely on the validation method to check for
-        // existance first
-        if (!menuItem.isPresent()) {
-          String exceptionString = "item id %d, not found";
-          throw new AddOrderPatchFailureException("-2", String.format(exceptionString, itemId));
-        }
+        /* Only a race condition can cause this to happen,
+         * we just checked for its existance with the validation method
+         **/
+        if (!menuItem.isPresent())
+          throw new MenuItemRetrievalException(
+              "-6", MessageFormat.format("menu item {0} not found", itemId));
 
         OrderItemModel orderItemModel = new OrderItemModel();
         orderItemModel.setCustomerOrderModel(customerOrder.get());
@@ -96,20 +102,20 @@ public class SessionSerivce {
         orderItemModel.setQuantity(itemQuantity);
         orderItemsToAdd.add(orderItemModel);
       }
-      for (OrderItemModel orderItem : orderItemsToAdd) orderItemRepository.save(orderItem);
-      customerOrderRepository.save(customerOrder.get());
+      orderItemsToAdd.forEach(
+          orderItem -> {
+            orderItemRepository.save(orderItem);
+          });
       // TODO: There should be an observer on the vendor side,
-      // to get updated with the new request patch of ordered items
+      // to signal for order updates
       return ResponseEntity.ok().body(new CustomerOrderPatchResponse("0", "order patch added"));
-    } catch (AddOrderPatchFailureException e) {
-      throw new AddOrderPatchFailureException(e.getCode(), e.getMessage());
+    } catch (MenuItemRetrievalException e) {
+      throw new MenuItemRetrievalException(e.getCode(), e.getMessage());
+    } catch (InvalidRequest e) {
+      throw new InvalidRequest(e.getCode(), e.getMessage());
     } catch (Exception e) {
       throw new AddOrderPatchFailureException("-1", e.getMessage());
     }
-  }
-
-  private void validateOrderPatchRequest(CustomerOrderPatchRequest customerOrderPatchRequest) {
-    authenticationValidation.validateOrderPatchRequest(customerOrderPatchRequest);
   }
 
   public ResponseEntity<LoginResponse> addCustomer(CustomerRequest customerRequest) {

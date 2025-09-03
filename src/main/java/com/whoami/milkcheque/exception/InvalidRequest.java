@@ -1,10 +1,10 @@
 package com.whoami.milkcheque.exception;
 
-public class MenuItemRetrievalException extends RuntimeException {
+public class InvalidRequest extends RuntimeException {
   private final String code;
   private final String message;
 
-  public MenuItemRetrievalException(String code, String message) {
+  public InvalidRequest(String code, String message) {
     super(message);
     this.code = code;
     this.message = message;

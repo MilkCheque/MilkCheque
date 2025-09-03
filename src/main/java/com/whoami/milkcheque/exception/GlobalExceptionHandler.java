@@ -28,6 +28,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(LoginProcessFailureException.class)
   public ResponseEntity<Object> handleLoginProcessFailureException(
       LoginProcessFailureException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(new LoginResponse(exception.getCode(), exception.getMessage(), ""));
   }
@@ -36,7 +39,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   public ResponseEntity<Object> handleMenuItemRetrievalException(
       MenuItemRetrievalException exception) {
     ErrorModel errorModel = new ErrorModel();
-    errorModel.setCode("22");
+    errorModel.setCode(exception.getCode());
     errorModel.setMessage(exception.getMessage());
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorModel);
   }
@@ -44,12 +47,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(StoreInfoRetrievalException.class)
   public ResponseEntity<Object> handleStoreInfoRetrievalException(
       StoreInfoRetrievalException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode("22");
+    errorModel.setMessage(exception.getCode());
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
   }
 
   @ExceptionHandler(AddOrderPatchFailureException.class)
   public ResponseEntity<Object> handleAddOrderPatchFailureException(
       AddOrderPatchFailureException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getCode());
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+  }
+
+  @ExceptionHandler(InvalidRequest.class)
+  public ResponseEntity<Object> handleInvalidRequest(InvalidRequest exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getMessage());
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
   }
 }
