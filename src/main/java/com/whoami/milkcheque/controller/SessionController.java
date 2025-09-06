@@ -2,14 +2,13 @@ package com.whoami.milkcheque.controller;
 
 import com.whoami.milkcheque.dto.request.CustomerOrderPatchRequest;
 import com.whoami.milkcheque.dto.request.CustomerRequest;
+import com.whoami.milkcheque.dto.response.AllOrdersResponse;
 import com.whoami.milkcheque.dto.response.CustomerOrderPatchResponse;
 import com.whoami.milkcheque.dto.response.LoginResponse;
 import com.whoami.milkcheque.service.SessionSerivce;
+import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/session")
@@ -29,5 +28,10 @@ public class SessionController {
   public ResponseEntity<CustomerOrderPatchResponse> addOrderPatch(
       @RequestBody CustomerOrderPatchRequest customerOrderPatchRequest) {
     return sessionSerivce.addOrderPatch(customerOrderPatchRequest);
+  }
+
+  @GetMapping("/allOrders")
+  public ResponseEntity<ArrayList<AllOrdersResponse>> getAllOrders(@RequestParam Long sessionId) {
+    return sessionSerivce.getAllOrders(sessionId);
   }
 }

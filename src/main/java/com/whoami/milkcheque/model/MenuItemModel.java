@@ -1,10 +1,12 @@
 package com.whoami.milkcheque.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 
-// TODO: Remove Data annotation
-@Data
+@Getter
+@Setter
 @Entity(name = "MenuItemModel")
 @Table(name = "menu_item")
 public class MenuItemModel {
@@ -31,4 +33,17 @@ public class MenuItemModel {
   @ManyToOne
   @JoinColumn(name = "store_id")
   private StoreModel storeModel;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof MenuItemModel)) return false;
+    MenuItemModel other = (MenuItemModel) o;
+    return menuId != null && menuId.equals(other.getMenuId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(menuId);
+  }
 }

@@ -9,5 +9,8 @@ public interface SessionRepository extends JpaRepository<SessionModel, Long> {
 
   SessionModel getByStoreTableModel_StoreTableId(Long storeTableId);
 
-  boolean existsByStoreTableModel_StoreTableId(Long storeTableId);
+  //  @Query("SELECT s FROM SessionModel s JOIN s.sessionCustomers c WHERE c.customerId =
+  // :customerId")
+  //  List<SessionModel> findAllByCustomerId(@Param("customerId") Long customerId);
+
 }

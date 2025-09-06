@@ -3,9 +3,11 @@ package com.whoami.milkcheque.model;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity(name = "StoreTableModel")
 @Table(name = "store_table")
 public class StoreTableModel {

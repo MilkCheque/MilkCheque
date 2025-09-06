@@ -2,9 +2,11 @@ package com.whoami.milkcheque.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "staff")
 public class StaffModel {
