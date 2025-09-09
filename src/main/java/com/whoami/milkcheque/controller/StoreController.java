@@ -2,6 +2,7 @@ package com.whoami.milkcheque.controller;
 
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
+import com.whoami.milkcheque.dto.response.StoreTableResponse;
 import com.whoami.milkcheque.service.StoreService;
 import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,11 @@ public class StoreController {
   @GetMapping("/menu")
   public ResponseEntity<ArrayList<MenuItemResponse>> getMenu(@RequestParam Long storeId) {
     return storeService.getMenuItems(storeId);
+  }
+
+  // TODO: Shoudl be restricted to staff only
+  @GetMapping("/tables")
+  public ResponseEntity<ArrayList<StoreTableResponse>> getStoreTables(@RequestParam Long storeId) {
+    return storeService.getStoreTables(storeId);
   }
 }

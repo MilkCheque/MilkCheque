@@ -2,6 +2,7 @@ package com.whoami.milkcheque.repository;
 
 import com.whoami.milkcheque.model.StoreTableModel;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,6 @@ public interface StoreTableRepository extends JpaRepository<StoreTableModel, Lon
   void activateTable(@Param("storeTableId") Long storeTableId);
 
   StoreTableModel findByStoreTableId(Long tableId);
+
+  ArrayList<StoreTableModel> findByStoreModel_StoreId(Long storeId);
 }
