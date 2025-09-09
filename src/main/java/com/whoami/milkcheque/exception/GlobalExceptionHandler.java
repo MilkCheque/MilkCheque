@@ -44,6 +44,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorModel);
   }
 
+  @ExceptionHandler(StoreTableRetrievalException.class)
+  public ResponseEntity<Object> handleStoreTableRetrievalException(
+      StoreTableRetrievalException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getMessage());
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorModel);
+  }
+
   @ExceptionHandler(StoreInfoRetrievalException.class)
   public ResponseEntity<Object> handleStoreInfoRetrievalException(
       StoreInfoRetrievalException exception) {

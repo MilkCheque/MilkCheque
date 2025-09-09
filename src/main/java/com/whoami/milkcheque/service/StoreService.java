@@ -54,19 +54,21 @@ public class StoreService {
 
   public ResponseEntity<ArrayList<StoreTableResponse>> getStoreTables(Long storeId) {
     try {
+      if (!storeRepository.existsByStoreId(storeId))
+        throw new StoreTableRetrievalException("-1", "Store id does not exist");
       ArrayList<StoreTableModel> storeTables =
           storeTableRepository.findByStoreModel_StoreId(storeId);
       ArrayList<StoreTableResponse> storeTablesDTO = new ArrayList<>();
       Mapper mapper = new Mapper();
       if (storeTables.isEmpty()) {
-        throw new StoreTableRetrievalException("-1", "Store tables not found");
+        throw new StoreTableRetrievalException("-2", "Store tables not found");
       }
       for (StoreTableModel storeTable : storeTables) {
         storeTablesDTO.add(mapper.convertStoreTableModelToDto(storeTable));
       }
       return ResponseEntity.status(HttpStatus.OK).body(storeTablesDTO);
     } catch (Exception e) {
-      throw new MenuItemRetrievalException("-2", "unexpected error （￣へ￣）" + e.getMessage());
+      throw new StoreTableRetrievalException("-3", "unexpected error （￣へ￣）" + e.getMessage());
     }
   }
 
