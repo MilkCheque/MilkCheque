@@ -1,51 +1,51 @@
 package com.whoami.milkcheque.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 
-
-// TODO: Remove Data annotation
-@Data
+@Getter
+@Setter
 @Entity(name = "MenuItemModel")
 @Table(name = "menu_item")
 public class MenuItemModel {
-    //TODO: Use sequence generator
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="mitem_id")
-    private Long menuId;
+  // TODO: Use sequence generator
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "mitem_id")
+  private Long menuId;
 
-    @Column(
-      name="mitem_name",
-      unique = false,
-      nullable = false
-    )
-    private String menuItemName;
+  @Column(name = "mitem_name", unique = false, nullable = false)
+  private String menuItemName;
 
-    @Column(
-      name="mitem_description",
-      unique = false,
-      nullable = false
-    )
-    private String menuItemDescription;
+  @Column(name = "mitem_description", unique = false, nullable = false)
+  private String menuItemDescription;
 
-    @Column(
-      name="mitem_price",
-      unique = false,
-      nullable = false
-    )
-    private Double menuItemPrice;
+  @Column(name = "mitem_price", unique = false, nullable = false)
+  private Double menuItemPrice;
 
-    //TODO: Set to false in production
-    @Lob
-    @Column(
-      name = "mitem_image",
-      unique = false,
-      nullable = true
-    )
-    private String menuItemImage;
+  // TODO: Set to false in production
+  @Column(name = "mitem_path", unique = false, nullable = true)
+  private String menuItemPicturePath;
 
-    @ManyToOne
-    @JoinColumn(name="store_id")
-    private StoreModel storeModel;
+  @Column(name = "mitem_category", unique = false, nullable = false)
+  private String menuItemCategory;
+
+  @ManyToOne
+  @JoinColumn(name = "store_id")
+  private StoreModel storeModel;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof MenuItemModel)) return false;
+    MenuItemModel other = (MenuItemModel) o;
+    return menuId != null && menuId.equals(other.getMenuId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(menuId);
+  }
 }

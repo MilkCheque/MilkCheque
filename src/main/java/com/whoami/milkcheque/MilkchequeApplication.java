@@ -6,9 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MilkchequeApplication {
 
-	public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        SpringApplication.run(MilkchequeApplication.class, args);
-	}
-
+    SpringApplication.run(MilkchequeApplication.class, args);
+  }
 }

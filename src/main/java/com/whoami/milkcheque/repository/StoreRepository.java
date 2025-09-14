@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StoreRepository extends JpaRepository<StoreModel, Long> {
-    StoreModel getStoreModelByStoreId(Long storeId);
+  Boolean existsByStoreId(Long storeId);
+
+  StoreModel getStoreModelByStoreId(Long storeId);
 }

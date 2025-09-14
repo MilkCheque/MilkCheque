@@ -12,54 +12,70 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(AuthenticationFormatException.class)
-    public ResponseEntity<Object> handleAuthenticationFormatException(
-            AuthenticationFormatException exception) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(exception.getMessage());
-    }
+  @ExceptionHandler(AuthenticationFormatException.class)
+  public ResponseEntity<Object> handleAuthenticationFormatException(
+      AuthenticationFormatException exception) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+  }
 
-    @ExceptionHandler(SignUpProcessFailureException.class)
-    public ResponseEntity<Object> handleSigupProcessFailureException(
-            SignUpProcessFailureException exception) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new SignUpResponse(exception.getCode(),
-                                     exception.getMessage()));
-    }
+  @ExceptionHandler(SignUpProcessFailureException.class)
+  public ResponseEntity<Object> handleSigupProcessFailureException(
+      SignUpProcessFailureException exception) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new SignUpResponse(exception.getCode(), exception.getMessage()));
+  }
 
-    @ExceptionHandler(LoginProcessFailureException.class)
-    public ResponseEntity<Object> handleLoginProcessFailureException(
-            LoginProcessFailureException exception) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new LoginResponse(exception.getCode(),
-                                    exception.getMessage(),
-                                    ""));
-    }
-    @ExceptionHandler(MenuItemRetrievalException.class)
-    public ResponseEntity<Object> handleMenuItemRetrievalException(MenuItemRetrievalException exception){
-        ErrorModel errorModel = new ErrorModel();
-        errorModel.setCode("22");
-        errorModel.setMessage(exception.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(errorModel);
-    }
-    @ExceptionHandler(StoreInfoRetrievalException.class)
-    public ResponseEntity<Object> handleStoreInfoRetrievalException(
-            StoreInfoRetrievalException exception){
-        return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(exception.getMessage());
-    }
+  @ExceptionHandler(LoginProcessFailureException.class)
+  public ResponseEntity<Object> handleLoginProcessFailureException(
+      LoginProcessFailureException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new LoginResponse(exception.getCode(), exception.getMessage(), ""));
+  }
 
-    @ExceptionHandler(AddOrderPatchFailureException.class)
-    public ResponseEntity<Object> handleAddOrderPatchFailureException(
-            AddOrderPatchFailureException exception) {
-        return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                .body(exception.getMessage());
-    }
+  @ExceptionHandler(MenuItemRetrievalException.class)
+  public ResponseEntity<Object> handleMenuItemRetrievalException(
+      MenuItemRetrievalException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getMessage());
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorModel);
+  }
+
+  @ExceptionHandler(StoreTableRetrievalException.class)
+  public ResponseEntity<Object> handleStoreTableRetrievalException(
+      StoreTableRetrievalException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getMessage());
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorModel);
+  }
+
+  @ExceptionHandler(StoreInfoRetrievalException.class)
+  public ResponseEntity<Object> handleStoreInfoRetrievalException(
+      StoreInfoRetrievalException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode("22");
+    errorModel.setMessage(exception.getCode());
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+  }
+
+  @ExceptionHandler(AddOrderPatchFailureException.class)
+  public ResponseEntity<Object> handleAddOrderPatchFailureException(
+      AddOrderPatchFailureException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getCode());
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+  }
+
+  @ExceptionHandler(InvalidRequest.class)
+  public ResponseEntity<Object> handleInvalidRequest(InvalidRequest exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getMessage());
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
+  }
 }

@@ -1,33 +1,26 @@
 name: Build and Deploy Docker Image to Azure Web App
-
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Azure Container Registry Login
         uses: azure/docker-login@v1
         with:
           login-server: milkchequeregistry.azurecr.io
           username: ${{ secrets.AZURE_ACR_USERNAME }}
           password: ${{ secrets.AZURE_ACR_PASSWORD }}
-
       - name: Build and Push Docker image
         run: |
           docker build -t milkchequeregistry.azurecr.io/milkcheque:latest -t milkchequeregistry.azurecr.io/milkcheque:${{ github.sha }} .
-          
           docker push milkchequeregistry.azurecr.io/milkcheque:latest
           docker push milkchequeregistry.azurecr.io/milkcheque:${{ github.sha }}
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
