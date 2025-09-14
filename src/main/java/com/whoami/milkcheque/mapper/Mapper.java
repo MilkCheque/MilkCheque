@@ -4,6 +4,7 @@ import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
+import com.whoami.milkcheque.dto.response.StoreTableResponse;
 import com.whoami.milkcheque.model.*;
 
 public class Mapper {
@@ -49,6 +50,13 @@ public class Mapper {
     menuItemModel.setMenuItemDescription(menuItemResponse.getMenuItemDescription());
     menuItemModel.setMenuItemPrice(menuItemResponse.getPrice());
     return menuItemModel;
+  }
+
+  public StoreTableResponse convertStoreTableModelToDto(StoreTableModel storeTableModel) {
+    StoreTableResponse storeTableResponse = new StoreTableResponse();
+    storeTableResponse.setStoreTableId(storeTableModel.getStoreTableId());
+    storeTableResponse.setStatus((storeTableModel.getIsActive() ? "active" : "inactive"));
+    return storeTableResponse;
   }
 
   public StoreInfo convertStoreModelToStoreInfoDto(StoreModel storeModel, Long tableId) {

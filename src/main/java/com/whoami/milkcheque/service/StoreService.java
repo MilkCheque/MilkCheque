@@ -2,11 +2,14 @@ package com.whoami.milkcheque.service;
 
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
+import com.whoami.milkcheque.dto.response.StoreTableResponse;
 import com.whoami.milkcheque.exception.MenuItemRetrievalException;
 import com.whoami.milkcheque.exception.StoreInfoRetrievalException;
+import com.whoami.milkcheque.exception.StoreTableRetrievalException;
 import com.whoami.milkcheque.mapper.Mapper;
 import com.whoami.milkcheque.model.MenuItemModel;
 import com.whoami.milkcheque.model.StoreModel;
+import com.whoami.milkcheque.model.StoreTableModel;
 import com.whoami.milkcheque.repository.MenuItemRepository;
 import com.whoami.milkcheque.repository.StoreRepository;
 import com.whoami.milkcheque.repository.StoreTableRepository;
@@ -21,15 +24,20 @@ public class StoreService {
   private final MenuItemRepository menuItemRepository;
   private final StoreRepository storeRepository;
   private final StoreTableRepository tableRepository;
+  private final StoreTableRepository storeTableRepository;
+
+  //  private final Mapper mapper;
 
   //    private final MenuItemDTO menuItemDTO;
   public StoreService(
       MenuItemRepository menuItemRepository,
       StoreRepository storeRepository,
-      StoreTableRepository tableRepository) {
+      StoreTableRepository tableRepository,
+      StoreTableRepository storeTableRepository) {
     this.menuItemRepository = menuItemRepository;
     this.storeRepository = storeRepository;
     this.tableRepository = tableRepository;
+    this.storeTableRepository = storeTableRepository;
   }
 
   public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItems(Long storeId) {
@@ -44,26 +52,6 @@ public class StoreService {
         menuItemsDTO.add(mapper.convertMenuItemModelToDto(menuItem));
       }
       return ResponseEntity.status(HttpStatus.OK).body(menuItemsDTO);
-    } catch (Exception e) {
-      throw new MenuItemRetrievalException("-2", "unexpected error （￣へ￣）" + e.getMessage());
-    }
-  }
-
-  public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItemByCategory(
-      Long storeId, String category) {
-    try {
-      ArrayList<MenuItemModel> menuItems =
-          menuItemRepository.findByStoreModel_StoreIdAndMenuItemCategory(storeId, category);
-      ArrayList<MenuItemResponse> menuItemsDTO = new ArrayList<>();
-      Mapper mapper = new Mapper();
-      if (menuItems.isEmpty()) {
-        throw new MenuItemRetrievalException("-1", "Menu items not found (⸝⸝๑﹏๑⸝⸝)");
-      }
-      for (MenuItemModel menuItem : menuItems) {
-        menuItemsDTO.add(mapper.convertMenuItemModelToDto(menuItem));
-      }
-      return ResponseEntity.status(HttpStatus.OK).body(menuItemsDTO);
-
     } catch (Exception e) {
       throw new MenuItemRetrievalException("-2", "unexpected error （￣へ￣）" + e.getMessage());
     }
@@ -87,5 +75,46 @@ public class StoreService {
 
   public void activateTable(Long tableId) {
     tableRepository.activateTable(tableId);
+  }
+
+  public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItemByCategory(
+      Long storeId, String category) {
+    try {
+      ArrayList<MenuItemModel> menuItems =
+          menuItemRepository.findByStoreModel_StoreIdAndMenuItemCategory(storeId, category);
+      ArrayList<MenuItemResponse> menuItemsDTO = new ArrayList<>();
+      Mapper mapper = new Mapper();
+      if (menuItems.isEmpty()) {
+        throw new MenuItemRetrievalException("-1", "Menu items not found (⸝⸝๑﹏๑⸝⸝)");
+      }
+      for (MenuItemModel menuItem : menuItems) {
+        menuItemsDTO.add(mapper.convertMenuItemModelToDto(menuItem));
+      }
+      return ResponseEntity.status(HttpStatus.OK).body(menuItemsDTO);
+
+    } catch (Exception e) {
+      throw new MenuItemRetrievalException("-2", "unexpected error （￣へ￣）" + e.getMessage());
+    }
+  }
+
+  public ResponseEntity<ArrayList<StoreTableResponse>> getStoreTables(Long storeId) {
+    try {
+      if (!storeRepository.existsByStoreId(storeId))
+        throw new StoreTableRetrievalException("-1", "Store id does not exist");
+      //            MenuItemRepository storeTableRepository;
+      ArrayList<StoreTableModel> storeTables =
+          storeTableRepository.findByStoreModel_StoreId(storeId);
+      ArrayList<StoreTableResponse> storeTablesDTO = new ArrayList<>();
+      Mapper mapper = new Mapper();
+      if (storeTables.isEmpty()) {
+        throw new StoreTableRetrievalException("-2", "Store tables not found");
+      }
+      for (StoreTableModel storeTable : storeTables) {
+        storeTablesDTO.add(mapper.convertStoreTableModelToDto(storeTable));
+      }
+      return ResponseEntity.status(HttpStatus.OK).body(storeTablesDTO);
+    } catch (Exception e) {
+      throw new StoreTableRetrievalException("-3", "unexpected error （￣へ￣）" + e.getMessage());
+    }
   }
 }
