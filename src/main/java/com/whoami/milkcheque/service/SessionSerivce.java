@@ -4,7 +4,7 @@ import com.whoami.milkcheque.dto.request.CustomerOrderPatchRequest;
 import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.response.AllOrdersResponse;
 import com.whoami.milkcheque.dto.response.CustomerOrderPatchResponse;
-import com.whoami.milkcheque.dto.response.LoginResponse;
+import com.whoami.milkcheque.dto.response.CustomerResponse;
 import com.whoami.milkcheque.exception.AddOrderPatchFailureException;
 import com.whoami.milkcheque.exception.LoginProcessFailureException;
 import com.whoami.milkcheque.exception.MenuItemRetrievalException;
@@ -116,19 +116,24 @@ public class SessionSerivce {
     }
   }
 
-  public ResponseEntity<LoginResponse> addCustomer(CustomerRequest customerRequest) {
+  public ResponseEntity<CustomerResponse> addCustomer(CustomerRequest customerRequest) {
     try {
       validateCustomerLoginRequest(customerRequest);
       Mapper mapper = new Mapper();
       CustomerModel customerModel = mapper.convertCustomerRequestToCustomerModel(customerRequest);
       customerRepository.save(customerModel);
+      Long customerId = customerModel.getCustomerId();
       String token = null;
-      createSession(
-          customerRequest.getTableId(),
-          customerModel.getCustomerId(),
-          customerRequest.getStoreId());
+      Long sessionId =
+          createSession(
+              customerRequest.getTableId(),
+              customerModel.getCustomerId(),
+              customerRequest.getStoreId());
 
-      return ResponseEntity.ok().body(new LoginResponse("1", "login success", token));
+      return ResponseEntity.ok()
+          .body(
+              new CustomerResponse(
+                  customerId, sessionId, "1", "Customer added successfully", token));
     } catch (Exception e) {
       throw new LoginProcessFailureException("-1", e.getMessage());
     }
@@ -138,12 +143,15 @@ public class SessionSerivce {
     authenticationValidation.validateCustomerRequest(customerRequest);
   }
 
-  private void createSession(Long tableId, Long customerId, Long storeId) {
+  private Long createSession(Long tableId, Long customerId, Long storeId) {
+    Optional<StoreTableModel> optionalStoreTable = storeTableRepository.findById(tableId);
+    if (!optionalStoreTable.isPresent()) {
+      throw new LoginProcessFailureException("-1", "Store table not found");
+    }
     Optional<SessionModel> optionalSessionModel =
         sessionRepository.findByStoreTableModel_StoreTableId(tableId);
     if (optionalSessionModel.isPresent()) {
-      addCustomerToSession(tableId, customerId);
-      return;
+      return addCustomerToSession(tableId, customerId);
     }
     SessionModel sessionModel = new SessionModel();
     StoreTableModel storeTableModel = storeTableRepository.findById(tableId).get();
@@ -153,16 +161,15 @@ public class SessionSerivce {
             .findById(storeId)
             .orElseThrow(() -> new RuntimeException("Store not found"));
 
-    //        sessionModel.setSessionId(2L);
     sessionModel.getSessionCustomers().add(customerModel);
     sessionModel.setStoreTableModel(storeTableModel);
     sessionModel.setStoreModel(storeModel);
     sessionRepository.save(sessionModel);
-    // customerModel.getCustomerSessions().add(sessionModel);
-    // customerRepository.save(customerModel);
+
+    return sessionModel.getSessionId();
   }
 
-  private void addCustomerToSession(Long tableId, Long customerId) {
+  private Long addCustomerToSession(Long tableId, Long customerId) {
     SessionModel sessionModel = sessionRepository.getByStoreTableModel_StoreTableId(tableId);
     if (sessionModel == null) {
       throw new RuntimeException("No session found for tableId " + tableId);
@@ -170,11 +177,9 @@ public class SessionSerivce {
     CustomerModel customerModel = customerRepository.findById(customerId).get();
     sessionModel.getSessionCustomers().add(customerModel);
     sessionRepository.save(sessionModel);
-    // customerModel.getCustomerSessions().add(sessionModel);
-    // customerRepository.save(customerModel);
+    return sessionModel.getSessionId();
   }
 
-  //    @Transactional
   public ResponseEntity<ArrayList<AllOrdersResponse>> getAllOrders(Long sessionId) {
     try {
       Optional<SessionModel> sessionOptional = sessionRepository.findById(sessionId);

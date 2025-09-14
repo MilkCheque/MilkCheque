@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface MenuItemRepository extends JpaRepository<MenuItemModel, Long> {
 
   ArrayList<MenuItemModel> findByStoreModel_StoreId(Long storeId);
+
+  ArrayList<MenuItemModel> findByStoreModel_StoreIdAndMenuItemCategory(
+      Long storeId, String category);
 }

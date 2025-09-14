@@ -49,6 +49,26 @@ public class StoreService {
     }
   }
 
+  public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItemByCategory(
+      Long storeId, String category) {
+    try {
+      ArrayList<MenuItemModel> menuItems =
+          menuItemRepository.findByStoreModel_StoreIdAndMenuItemCategory(storeId, category);
+      ArrayList<MenuItemResponse> menuItemsDTO = new ArrayList<>();
+      Mapper mapper = new Mapper();
+      if (menuItems.isEmpty()) {
+        throw new MenuItemRetrievalException("-1", "Menu items not found (⸝⸝๑﹏๑⸝⸝)");
+      }
+      for (MenuItemModel menuItem : menuItems) {
+        menuItemsDTO.add(mapper.convertMenuItemModelToDto(menuItem));
+      }
+      return ResponseEntity.status(HttpStatus.OK).body(menuItemsDTO);
+
+    } catch (Exception e) {
+      throw new MenuItemRetrievalException("-2", "unexpected error （￣へ￣）" + e.getMessage());
+    }
+  }
+
   public ResponseEntity<StoreInfo> getStoreInfo(Long storeId, Long tableId) {
     try {
       StoreModel storeModel = storeRepository.getStoreModelByStoreId(storeId);

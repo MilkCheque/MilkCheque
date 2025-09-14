@@ -6,6 +6,7 @@ import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.exception.*;
 import com.whoami.milkcheque.model.StaffModel;
 import com.whoami.milkcheque.repository.StaffRepository;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
@@ -63,6 +64,16 @@ public class AuthenticationValidation {
     throw new AuthenticationFormatException("-1", message);
   }
 
+  public void staffDOBValidation(LocalDate staffDOB) {
+    String message = null;
+    if (staffDOB == null) message = "staffDOB can't be null";
+    if (staffDOB.isAfter(LocalDate.now()) || staffDOB.isEqual(LocalDate.now())) {
+      message = "Birthdate can't be in the future";
+    }
+    if (message == null) return;
+    throw new AuthenticationFormatException("-1", message);
+  }
+
   public boolean emailExist(String email) throws Exception {
     Optional<StaffModel> staffModel = staffRepository.findByStaffEmail(email);
     return staffModel.isPresent();
@@ -80,7 +91,7 @@ public class AuthenticationValidation {
     nameValidation(signUpRequest.getFirstName());
     nameValidation(signUpRequest.getLastName());
     emailValidation(signUpRequest.getEmail());
-    // TODO: Validate DOB
+    staffDOBValidation(signUpRequest.getStaffDOB());
     phoneNumberValidation(signUpRequest.getPhone());
     passwordValidation(signUpRequest.getPassword());
     emailValidation(signUpRequest.getEmail());
@@ -102,9 +113,18 @@ public class AuthenticationValidation {
       throw new AuthenticationFailureException("-1", "email or password don't match");
   }
 
+  public void validateCustomerPhoneNumber(String phoneNumber) {
+    String message = null;
+    if (phoneNumber == null) message = "phone number is null";
+    else if (phoneNumber.isEmpty()) message = "phone number field is empty";
+    else if (!phoneNumber.matches(phoneRegex)) message = "invalid phone number";
+    if (message == null) return;
+    throw new AuthenticationFormatException("-1", message);
+  }
+
   public void validateCustomerRequest(CustomerRequest customerRequest) {
     nameValidation(customerRequest.getFirstName());
     nameValidation(customerRequest.getLastName());
-    phoneNumberValidation(customerRequest.getPhone());
+    validateCustomerPhoneNumber(customerRequest.getPhone());
   }
 }

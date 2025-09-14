@@ -26,4 +26,10 @@ public class StoreController {
   public ResponseEntity<ArrayList<MenuItemResponse>> getMenu(@RequestParam Long storeId) {
     return storeService.getMenuItems(storeId);
   }
+
+  @GetMapping("/menu/category")
+  public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItemsByCategory(
+      @RequestParam Long storeId, @RequestParam String category) {
+    return storeService.getMenuItemByCategory(storeId, category);
+  }
 }

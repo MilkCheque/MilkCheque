@@ -1,17 +1,22 @@
 package com.whoami.milkcheque.dto.request;
 
-import lombok.Data;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class SignUpRequest {
-//    @EMailValidation
-    private Long    id;
-    private String  firstName;
-    private String  lastName;
-    private String  email;
-    private LocalDate DOB;
-    private String  phone;
-    private String  password;
+  //    @EMailValidation
+  private Long id;
+  private String firstName;
+  private String lastName;
+  private String email;
+
+  @JsonFormat(pattern = "MM/dd/yyyy")
+  private LocalDate staffDOB;
+
+  private String phone;
+  private String password;
 }

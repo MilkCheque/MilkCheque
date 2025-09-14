@@ -14,7 +14,7 @@ public class CustomerOrderModel {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "customer_order_id")
-  private String customerOrderId;
+  private Long customerOrderId;
 
   @ManyToOne
   @JoinColumn(name = "customer_id")
@@ -26,4 +26,7 @@ public class CustomerOrderModel {
 
   @OneToMany(mappedBy = "customerOrderModel", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<OrderItemModel> orderItemsSet = new HashSet<>();
+
+  @OneToMany(mappedBy = "customerOrderModel", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<PaymentModel> paymentSet = new HashSet<>();
 }

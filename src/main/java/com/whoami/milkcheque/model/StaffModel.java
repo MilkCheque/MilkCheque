@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class StaffModel {
   private String staffEmail;
 
   @Column(name = "staff_dob", unique = false, nullable = false)
+  @JsonFormat(pattern = "MM/dd/yyyy")
   private LocalDate staffDOB;
 
   @Column(name = "staff_password", unique = false, nullable = false)

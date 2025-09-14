@@ -4,7 +4,7 @@ import com.whoami.milkcheque.dto.request.CustomerOrderPatchRequest;
 import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.response.AllOrdersResponse;
 import com.whoami.milkcheque.dto.response.CustomerOrderPatchResponse;
-import com.whoami.milkcheque.dto.response.LoginResponse;
+import com.whoami.milkcheque.dto.response.CustomerResponse;
 import com.whoami.milkcheque.service.SessionSerivce;
 import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,8 @@ public class SessionController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<LoginResponse> addCustomer(@RequestBody CustomerRequest customerRequest) {
+  public ResponseEntity<CustomerResponse> addCustomer(
+      @RequestBody CustomerRequest customerRequest) {
     return sessionSerivce.addCustomer(customerRequest);
   }
 

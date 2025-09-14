@@ -14,7 +14,7 @@ public class Mapper {
     staffModel.setStaffFirstName(signUpRequest.getFirstName());
     staffModel.setStaffLastName(signUpRequest.getLastName());
     staffModel.setStaffEmail(signUpRequest.getEmail());
-    staffModel.setStaffDOB(signUpRequest.getDOB());
+    staffModel.setStaffDOB(signUpRequest.getStaffDOB());
     staffModel.setStaffPhone(signUpRequest.getPhone());
     staffModel.setStaffPassword(signUpRequest.getPassword());
     return staffModel;
@@ -25,7 +25,7 @@ public class Mapper {
     signUpRequest.setFirstName(staffModel.getStaffFirstName());
     signUpRequest.setLastName(staffModel.getStaffLastName());
     signUpRequest.setEmail(staffModel.getStaffEmail());
-    signUpRequest.setDOB(staffModel.getStaffDOB());
+    signUpRequest.setStaffDOB(staffModel.getStaffDOB());
     signUpRequest.setPhone(staffModel.getStaffPhone());
     signUpRequest.setPassword(staffModel.getStaffPassword());
     return signUpRequest;
@@ -37,6 +37,8 @@ public class Mapper {
     menuItemResponse.setMenuItemName(menuItemModel.getMenuItemName());
     menuItemResponse.setMenuItemDescription(menuItemModel.getMenuItemDescription());
     menuItemResponse.setPrice(menuItemModel.getMenuItemPrice());
+    menuItemResponse.setMenuItemPicturePath(menuItemModel.getMenuItemPicturePath());
+    menuItemResponse.setMenuItemCategory(menuItemModel.getMenuItemCategory());
     return menuItemResponse;
   }
 
