@@ -193,20 +193,24 @@ public class SessionSerivce {
 
       for (CustomerModel customer : allCustomers) {
         Set<CustomerOrderModel> orders = new HashSet<>(customer.getOrdersSet());
-        ArrayList<OrderItemInfo> orderItems = new ArrayList<>();
+        Map<Long, OrderItemInfo> itemMap = new HashMap<>();
         for (CustomerOrderModel order : orders) {
           for (OrderItemModel orderItem : new HashSet<>(order.getOrderItemsSet())) {
             MenuItemModel menuitemModel = orderItem.getMenuItemModel();
-            String name = menuitemModel.getMenuItemName();
+            Long menuItemId = menuitemModel.getMenuId();
+            String menuItemName = menuitemModel.getMenuItemName();
             Long quantity = orderItem.getQuantity();
             Double price = menuitemModel.getMenuItemPrice();
-            orderItems.add(
-                new OrderItemInfo(
-                    menuitemModel.getMenuItemName(),
-                    orderItem.getQuantity(),
-                    menuitemModel.getMenuItemPrice()));
+            itemMap.merge(
+                menuItemId,
+                new OrderItemInfo(menuItemName, quantity, price),
+                (existing, newItem) -> {
+                  existing.setQuantiy(existing.getQuantity() + newItem.getQuantity());
+                  return existing;
+                });
           }
         }
+        ArrayList<OrderItemInfo> orderItems = new ArrayList<>(itemMap.values());
 
         AllOrdersResponse allOrdersResponse =
             new AllOrdersResponse(
@@ -219,6 +223,61 @@ public class SessionSerivce {
       throw new OrdersRetrievalException(e.getMessage());
     }
   }
+  //    public ResponseEntity<ArrayList<AllOrdersResponse>> getAllOrders(Long sessionId) {
+  //        try {
+  //            Optional<SessionModel> sessionOptional = sessionRepository.findById(sessionId);
+  //            if (!sessionOptional.isPresent()) {
+  //                throw new MenuItemRetrievalException("-1", "Session not found (⸝⸝๑﹏๑⸝⸝)");
+  //            }
+  //
+  //            SessionModel sessionModel = sessionOptional.get();
+  //            Set<CustomerModel> allCustomers = sessionModel.getSessionCustomers();
+  //            ArrayList<AllOrdersResponse> allOrdersResponses = new ArrayList<>();
+  //
+  //            for (CustomerModel customer : allCustomers) {
+  //                Set<CustomerOrderModel> orders = new HashSet<>(customer.getOrdersSet());
+  //                Map<Long, OrderItemInfo> itemMap = new HashMap<>();
+  //
+  //                for (CustomerOrderModel order : orders) {
+  //                    for (OrderItemModel orderItem : order.getOrderItemsSet()) {
+  //                        MenuItemModel menuItemModel = orderItem.getMenuItemModel();
+  //                        Long itemId = menuItemModel.getMenuId();
+  //
+  //                        itemMap.merge(
+  //                                itemId,
+  //                                new OrderItemInfo(
+  //                                        menuItemModel.getMenuItemName(),
+  //                                        orderItem.getQuantity(),
+  //                                        menuItemModel.getMenuItemPrice()
+  //                                ),
+  //                                (existing, newItem) -> {
+  //                                    // merge quantities if same item
+  //                                    existing.setQuantity(existing.getQuantity() +
+  // newItem.getQuantity());
+  //                                    return existing;
+  //                                }
+  //                        );
+  //                    }
+  //                }
+  //
+  //                ArrayList<OrderItemInfo> orderItems = new ArrayList<>(itemMap.values());
+  //
+  //                AllOrdersResponse allOrdersResponse =
+  //                        new AllOrdersResponse(
+  //                                customer.getCustomerId(),
+  //                                customer.getCustomerFirstName(),
+  //                                orderItems
+  //                        );
+  //
+  //                allOrdersResponses.add(allOrdersResponse);
+  //            }
+  //
+  //            return ResponseEntity.ok().body(allOrdersResponses);
+  //
+  //        } catch (Exception e) {
+  //            throw new OrdersRetrievalException(e.getMessage());
+  //        }
+  //    }
 
   // customer won't be able to scan another qr code anyway
   //  private boolean isCustomerInSession(Long customerId) {

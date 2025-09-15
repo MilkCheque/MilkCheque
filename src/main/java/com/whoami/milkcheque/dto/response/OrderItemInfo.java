@@ -15,4 +15,6 @@ public class OrderItemInfo {
     this.quantity = quantity;
     this.price = price;
   }
+
+  public void setQuantiy(long l) {}
 }
