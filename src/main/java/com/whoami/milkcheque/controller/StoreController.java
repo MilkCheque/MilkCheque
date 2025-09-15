@@ -29,7 +29,7 @@ public class StoreController {
     return storeService.getMenuItems(storeId);
   }
 
-  // TODO: Shoudl be restricted to staff only
+  // TODO: Should be restricted to staff only
   @GetMapping("/tables")
   public ResponseEntity<ArrayList<StoreTableResponse>> getStoreTables(@RequestParam Long storeId) {
     return storeService.getStoreTables(storeId);
@@ -41,10 +41,29 @@ public class StoreController {
     return storeService.getMenuItemByCategory(storeId, categoryId);
   }
 
-  // TODO: Shoudl be restricted to staff only
+  // TODO: Should be restricted to staff only
   @PostMapping("/table/order/update")
   public ResponseEntity<Boolean> updateSessionOrders(
       @RequestBody SessionOrdersUpdateRequest sessionOrdersUpdateRequest) {
     return storeService.sessionOrdersUpdate(sessionOrdersUpdateRequest);
+  }
+
+  // TODO: Should be restricted to staff only
+  @PostMapping("/menu/add")
+  public ResponseEntity addMenutItem() {
+    // TODO: NOT IMPLEMENTED
+    return ResponseEntity.badRequest().body("NOT IMPLEMENTED");
+  }
+
+  @PostMapping("/menu/edit")
+  public ResponseEntity editMenuItem() {
+    // TODO: NOT IMPLEMENTED
+    return ResponseEntity.badRequest().body("NOT IMPLEMENTED");
+  }
+
+  @PostMapping("/menu/remove")
+  public ResponseEntity removeMennItem() {
+    // TODO: NOT IMPLEMENTED
+    return ResponseEntity.badRequest().body("NOT IMPLEMENTED");
   }
 }
