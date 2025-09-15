@@ -1,7 +1,7 @@
 package com.whoami.milkcheque.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.util.Map;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +12,10 @@ public class AllOrdersResponse {
 
   private Long customerId;
   private String customerName;
-  Map<String, Long> orderItems;
-
-  // total
-  // item price
+  ArrayList<OrderItemInfo> orderItems;
 
   public AllOrdersResponse(
-      Long customerId, String customerFirstName, Map<String, Long> orderItems) {
+      Long customerId, String customerFirstName, ArrayList<OrderItemInfo> orderItems) {
     this.customerId = customerId;
     this.customerName = customerFirstName;
     this.orderItems = orderItems;

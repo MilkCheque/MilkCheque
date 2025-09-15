@@ -78,10 +78,10 @@ public class StoreService {
   }
 
   public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItemByCategory(
-      Long storeId, String category) {
+      Long storeId, Integer categoryId) {
     try {
       ArrayList<MenuItemModel> menuItems =
-          menuItemRepository.findByStoreModel_StoreIdAndMenuItemCategory(storeId, category);
+          menuItemRepository.findByStoreModel_StoreIdAndMenuItemCategoryId(storeId, categoryId);
       ArrayList<MenuItemResponse> menuItemsDTO = new ArrayList<>();
       Mapper mapper = new Mapper();
       if (menuItems.isEmpty()) {

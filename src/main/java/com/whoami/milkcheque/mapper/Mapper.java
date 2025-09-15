@@ -38,8 +38,8 @@ public class Mapper {
     menuItemResponse.setMenuItemName(menuItemModel.getMenuItemName());
     menuItemResponse.setMenuItemDescription(menuItemModel.getMenuItemDescription());
     menuItemResponse.setPrice(menuItemModel.getMenuItemPrice());
-    menuItemResponse.setMenuItemPicturePath(menuItemModel.getMenuItemPicturePath());
-    menuItemResponse.setMenuItemCategory(menuItemModel.getMenuItemCategory());
+    menuItemResponse.setMenuItemPictureURL(menuItemModel.getMenuItemPictureURL());
+    menuItemResponse.setMenuItemCategory(menuItemModel.getMenuItemCategoryId());
     return menuItemResponse;
   }
 

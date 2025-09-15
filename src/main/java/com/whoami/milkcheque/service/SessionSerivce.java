@@ -5,6 +5,7 @@ import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.response.AllOrdersResponse;
 import com.whoami.milkcheque.dto.response.CustomerOrderPatchResponse;
 import com.whoami.milkcheque.dto.response.CustomerResponse;
+import com.whoami.milkcheque.dto.response.OrderItemInfo;
 import com.whoami.milkcheque.exception.AddOrderPatchFailureException;
 import com.whoami.milkcheque.exception.LoginProcessFailureException;
 import com.whoami.milkcheque.exception.MenuItemRetrievalException;
@@ -192,14 +193,21 @@ public class SessionSerivce {
 
       for (CustomerModel customer : allCustomers) {
         Set<CustomerOrderModel> orders = new HashSet<>(customer.getOrdersSet());
-        Map<String, Long> orderItems = new HashMap<>();
-
+        ArrayList<OrderItemInfo> orderItems = new ArrayList<>();
         for (CustomerOrderModel order : orders) {
           for (OrderItemModel orderItem : new HashSet<>(order.getOrderItemsSet())) {
             MenuItemModel menuitemModel = orderItem.getMenuItemModel();
-            orderItems.put(menuitemModel.getMenuItemName(), orderItem.getQuantity());
+            String name = menuitemModel.getMenuItemName();
+            Long quantity = orderItem.getQuantity();
+            Double price = menuitemModel.getMenuItemPrice();
+            orderItems.add(
+                new OrderItemInfo(
+                    menuitemModel.getMenuItemName(),
+                    orderItem.getQuantity(),
+                    menuitemModel.getMenuItemPrice()));
           }
         }
+
         AllOrdersResponse allOrdersResponse =
             new AllOrdersResponse(
                 customer.getCustomerId(), customer.getCustomerFirstName(), orderItems);

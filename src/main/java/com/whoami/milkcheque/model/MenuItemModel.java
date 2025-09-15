@@ -25,12 +25,11 @@ public class MenuItemModel {
   @Column(name = "mitem_price", unique = false, nullable = false)
   private Double menuItemPrice;
 
-  // TODO: Set to false in production
-  @Column(name = "mitem_path", unique = false, nullable = true)
-  private String menuItemPicturePath;
+  @Column(name = "mitem_URL ", unique = false, nullable = false)
+  private String menuItemPictureURL;
 
   @Column(name = "mitem_category", unique = false, nullable = false)
-  private String menuItemCategory;
+  private Integer menuItemCategoryId;
 
   @ManyToOne
   @JoinColumn(name = "store_id")

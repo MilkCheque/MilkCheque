@@ -8,6 +8,6 @@ public class MenuItemResponse {
   private String menuItemName;
   private Double price;
   private String menuItemDescription;
-  private String menuItemCategory;
-  private String menuItemPicturePath;
+  private Integer menuItemCategory;
+  private String menuItemPictureURL;
 }

@@ -36,7 +36,7 @@ public class StoreController {
 
   @GetMapping("/menu/category")
   public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItemsByCategory(
-      @RequestParam Long storeId, @RequestParam String category) {
-    return storeService.getMenuItemByCategory(storeId, category);
+      @RequestParam Long storeId, @RequestParam Integer categoryId) {
+    return storeService.getMenuItemByCategory(storeId, categoryId);
   }
 }
