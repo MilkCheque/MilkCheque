@@ -18,19 +18,22 @@ public class CustomerModel {
   @Column(name = "customer_id")
   private Long customerId;
 
-  @Column(name = "customer_first_name", unique = false, nullable = false)
+  @Column(name = "customer_first_name", unique = false, nullable = true)
   private String customerFirstName;
 
-  @Column(name = "customer_last_name", unique = false, nullable = false)
+  @Column(name = "customer_last_name", unique = false, nullable = true)
   private String customerLastName;
 
-  @Column(name = "customer_phone", unique = true, nullable = false)
+  @Column(name = "customer_phone", unique = true, nullable = true)
   private String customerPhone;
 
-  @Column(name = "customer_dob", unique = false, nullable = false)
+  @Column(name = "customer_email", unique = true, nullable = false)
+  private String customerEmail;
+
+  @Column(name = "customer_dob", unique = false, nullable = true)
   private LocalDate customerDOB;
 
-  @Column(name = "customer_password", unique = false, nullable = false)
+  @Column(name = "customer_password", unique = false, nullable = true)
   private String customerPassword;
 
   @OneToMany(mappedBy = "customerModel", cascade = CascadeType.ALL, orphanRemoval = true)

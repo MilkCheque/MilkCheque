@@ -70,10 +70,7 @@ public class Mapper {
   public CustomerModel convertCustomerRequestToCustomerModel(CustomerRequest customerRequest) {
     CustomerModel customerModel = new CustomerModel();
     customerModel.setCustomerFirstName(customerRequest.getFirstName());
-    customerModel.setCustomerLastName(customerRequest.getLastName());
-    customerModel.setCustomerPhone(customerRequest.getPhone());
-    customerModel.setCustomerDOB(customerRequest.getCustomerDOB());
-    customerModel.setCustomerPassword(customerRequest.getCustomerPassword());
+    customerModel.setCustomerEmail(customerRequest.getCustomerEmail());
     return customerModel;
   }
 }

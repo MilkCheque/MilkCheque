@@ -122,9 +122,17 @@ public class AuthenticationValidation {
     throw new AuthenticationFormatException("-1", message);
   }
 
+  public void customerEmailValidation(String email) {
+    String message = null;
+    if (email == null) message = "email is null";
+    else if (email.isEmpty()) message = "email field is empty";
+    else if (!email.matches(emailRegex)) message = "invalid email";
+    if (message == null) return;
+    throw new AuthenticationFormatException("-1", message);
+  }
+
   public void validateCustomerRequest(CustomerRequest customerRequest) {
     nameValidation(customerRequest.getFirstName());
-    nameValidation(customerRequest.getLastName());
-    validateCustomerPhoneNumber(customerRequest.getPhone());
+    customerEmailValidation(customerRequest.getCustomerEmail());
   }
 }
