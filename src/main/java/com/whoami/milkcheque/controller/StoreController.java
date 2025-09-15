@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.controller;
 
+import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
 import com.whoami.milkcheque.dto.response.StoreTableResponse;
@@ -38,5 +39,12 @@ public class StoreController {
   public ResponseEntity<ArrayList<MenuItemResponse>> getMenuItemsByCategory(
       @RequestParam Long storeId, @RequestParam Integer categoryId) {
     return storeService.getMenuItemByCategory(storeId, categoryId);
+  }
+
+  // TODO: Shoudl be restricted to staff only
+  @PostMapping("/table/order/update")
+  public ResponseEntity<Boolean> updateSessionOrders(
+      @RequestBody SessionOrdersUpdateRequest sessionOrdersUpdateRequest) {
+    return storeService.sessionOrdersUpdate(sessionOrdersUpdateRequest);
   }
 }
