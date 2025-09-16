@@ -47,4 +47,8 @@ public class PaymentModel {
   @ManyToOne
   @JoinColumn(name = "customer_order_id", nullable = true)
   private CustomerOrderModel customerOrderModel;
+
+  //    @ManyToOne
+  //    @JoinColumn(name = "payer_customer_id", nullable = true)
+  //    private CustomerModel payerCustomer;
 }

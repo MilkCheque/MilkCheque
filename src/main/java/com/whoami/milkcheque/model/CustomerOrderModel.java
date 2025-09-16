@@ -16,6 +16,9 @@ public class CustomerOrderModel {
   @Column(name = "customer_order_id")
   private Long customerOrderId;
 
+  @Column(name = "is_paid")
+  private boolean paid;
+
   @ManyToOne
   @JoinColumn(name = "customer_id")
   private CustomerModel customerModel;
@@ -29,4 +32,7 @@ public class CustomerOrderModel {
 
   @OneToMany(mappedBy = "customerOrderModel", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<PaymentModel> paymentSet = new HashSet<>();
+  //
+  //    public boolean isPaid() { return paid; }   // ✅ correct
+  //    public void setPaid(boolean paid) { this.paid = paid; }
 }

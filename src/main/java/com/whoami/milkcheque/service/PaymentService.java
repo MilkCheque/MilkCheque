@@ -8,13 +8,16 @@ import com.whoami.milkcheque.repository.CustomerOrderRepository;
 import com.whoami.milkcheque.repository.PaymentRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@Slf4j
 public class PaymentService {
 
   private final PaymobConfig paymobConfig;
@@ -47,6 +50,7 @@ public class PaymentService {
   }
 
   private Integer registerOrder(String authToken, Integer amountCents, String merchantOrderId) {
+    // check if it is already paid if yes return
     String url = "https://accept.paymob.com/api/ecommerce/orders";
 
     Map<String, Object> requestBody = new HashMap<>();
@@ -91,7 +95,9 @@ public class PaymentService {
     requestBody.put("billing_data", billingData);
     requestBody.put("currency", "EGP");
     requestBody.put("integration_id", paymobConfig.getIntegrationId());
-    requestBody.put("callback_url", "https://6971e220c85c.ngrok-free.ap/payments/callback");
+    requestBody.put(
+        "callback_url",
+        "https://milkchequeapp-fzemegbdh9hgbkhf.spaincentral-01.azurewebsites.net/payments/callback");
     requestBody.put("expiration", 3600);
 
     HttpHeaders headers = new HttpHeaders();
@@ -110,12 +116,30 @@ public class PaymentService {
         + paymentToken;
   }
 
-  public ResponseEntity<String> paymob(Integer amountCents, String merchantOrderId, String email) {
+  public ResponseEntity<String> paymob(
+      Integer amountCents,
+      String merchantOrderId,
+      String email,
+      ArrayList<Long> otherMerchantsOrderId) {
+    if (isOrderPaid(merchantOrderId)) {
+      return ResponseEntity.ok().body("Order is already paid");
+    }
     String authToken = authenticate();
     Integer orderId = registerOrder(authToken, amountCents, merchantOrderId);
     String paymentToken = generatePaymentKey(authToken, orderId, amountCents, email);
     String iframe = getIframeUrl(paymentToken);
     return ResponseEntity.ok().body(iframe);
+  }
+
+  public boolean isOrderPaid(String merchantOrderId) {
+    Long orderId = Long.valueOf(merchantOrderId);
+
+    CustomerOrderModel order =
+        customerOrderRepository
+            .findById(orderId)
+            .orElseThrow(() -> new PaymobException("Order not found with id: " + merchantOrderId));
+
+    return order.isPaid();
   }
 
   //    public ResponseEntity<String> processCallBack(Map<String, Object> payload ){
@@ -172,30 +196,31 @@ public class PaymentService {
   //
   //
   //        }
+  //  @Transactional
   public ResponseEntity<String> processCallBack(Map<String, Object> payload) {
+    log.info("process Call back >>>>>>>>>>>>>>>>> ");
+
     try {
       Map<String, Object> obj = (Map<String, Object>) payload.get("obj");
       if (obj == null) {
         return ResponseEntity.badRequest().body("Missing obj in callback");
       }
 
-      // Extract nested order
       Map<String, Object> order = (Map<String, Object>) obj.get("order");
       if (order == null) {
         return ResponseEntity.badRequest().body("Missing order in callback");
       }
 
-      // Parse fields safely
+      log.info("value of status from payload: ", obj.get("success"));
+
       Integer amountCents = Integer.valueOf(obj.get("amount_cents").toString());
       String currency = obj.get("currency").toString();
-      Boolean success = Boolean.valueOf(obj.get("success").toString());
+      Boolean isSuccess = (Boolean) obj.get("success");
       String transactionId = obj.get("id").toString();
 
-      // merchant_order_id = your system’s order ID
       Long merchantOrderId = Long.valueOf(order.get("merchant_order_id").toString());
       String paymobOrderId = order.get("id").toString();
 
-      // Handle created_at date with flexible formatter
       String createdAtISO = order.get("created_at").toString();
       LocalDateTime createdAt;
       try {
@@ -205,17 +230,26 @@ public class PaymentService {
         DateTimeFormatter fallback = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
         createdAt = LocalDateTime.parse(createdAtISO, fallback);
       }
+      //              final Logger log = (Logger) LoggerFactory.getLogger(PaymentController.class);
+      //        log.info("ANA HENA {}", success);
 
-      String status = success ? "success" : "fail";
+      String status = isSuccess ? "success" : "fail";
+      log.info("----------------------------------outside conditions ---------------", isSuccess);
 
-      // Find customer order by merchant_order_id (not paymob order_id)
       CustomerOrderModel customerOrder =
           customerOrderRepository
               .findById(merchantOrderId)
               .orElseThrow(
                   () -> new PaymobException("Order not found with id: " + merchantOrderId));
+      //        customerOrder.setPaid(true);
+      //        customerOrderRepository.saveAndFlush(customerOrder);
 
-      // Save payment
+      if (isSuccess) {
+        log.info("----------------------------------in conditions ---------------");
+        customerOrder.setPaid(true);
+        customerOrderRepository.save(customerOrder);
+      }
+
       PaymentModel paymentModel = new PaymentModel();
       paymentModel.setAmountCents(amountCents);
       paymentModel.setCurrency(currency);

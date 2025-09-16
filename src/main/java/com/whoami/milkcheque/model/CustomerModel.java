@@ -42,6 +42,13 @@ public class CustomerModel {
   @ManyToMany(mappedBy = "sessionCustomers")
   private Set<SessionModel> customerSessions = new HashSet<>();
 
+  //    @ManyToOne
+  //    @JoinColumn(name = "payer_customer_id")
+  //    private CustomerModel payer;
+  //
+  //    @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL, orphanRemoval = false)
+  //    private Set<PaymentModel> paymentsMade = new HashSet<>();
+
   @Override
   public int hashCode() {
     return customerId == null ? 0 : customerId.hashCode();

@@ -1,6 +1,7 @@
 package com.whoami.milkcheque.controller;
 
 import com.whoami.milkcheque.service.PaymentService;
+import java.util.ArrayList;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +20,10 @@ public class PaymentController {
   public ResponseEntity<String> pay(
       @RequestParam Integer amountCents,
       @RequestParam String merchantOrderId,
-      @RequestParam String email) {
+      @RequestParam String email,
+      @RequestBody ArrayList<Long> otherMerchantsOrderId) {
 
-    return paymentService.paymob(amountCents, merchantOrderId, email);
+    return paymentService.paymob(amountCents, merchantOrderId, email, otherMerchantsOrderId);
   }
 
   @PostMapping("/callback")
