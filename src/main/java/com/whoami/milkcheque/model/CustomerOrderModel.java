@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "CustomerOrderModel")
+@Entity(name = "CustomerOrderModel") // TODO need to check to remove the name
 @Table(name = "customer_order")
 public class CustomerOrderModel {
   @Id
@@ -34,11 +34,11 @@ public class CustomerOrderModel {
   private Set<PaymentModel> paymentSet = new HashSet<>();
 
   //
-  public boolean isPaid() {
-    return paid;
-  }
-
-  public void setPaid(boolean paid) {
-    this.paid = paid;
-  }
+  //  public boolean isPaid() {
+  //    return paid;
+  //  }
+  //
+  //  public void setPaid(boolean paid) {
+  //    this.paid = paid;
+  //  }
 }

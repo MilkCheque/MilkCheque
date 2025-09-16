@@ -98,7 +98,7 @@ public class SessionSerivce {
           String exceptionString = "item id %d, not found";
           throw new AddOrderPatchFailureException("-2", String.format(exceptionString, itemId));
         }
-
+        customerOrder.get().setPaid(false);
         OrderItemModel orderItemModel = new OrderItemModel();
         orderItemModel.setCustomerOrderModel(customerOrder.get());
         orderItemModel.setMenuItemModel(menuItem.get());

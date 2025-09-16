@@ -139,64 +139,9 @@ public class PaymentService {
             .findById(orderId)
             .orElseThrow(() -> new PaymobException("Order not found with id: " + merchantOrderId));
 
-    return order.isPaid();
+    return order.getPaid();
   }
 
-  //    public ResponseEntity<String> processCallBack(Map<String, Object> payload ){
-  //        try {
-  //            Map<String, Object> obj = (Map<String, Object>) payload.get("obj");
-  //            if(obj==null){
-  //                return ResponseEntity.badRequest().body("Missing obj in callback");
-  //            }
-  //            Map<String, Object> order = (Map<String, Object>) obj.get("order") ;
-  //
-  //
-  //            Integer amountCents= Integer.valueOf(obj.get("amount_cents").toString());
-  //            String currency= obj.get("currency").toString();
-  //            String success =  obj.get("success").toString();
-  //            String transactionId = (obj.get("id").toString());
-  //            Long orderId = Long.valueOf(obj.get("order_id").toString());
-  //            Integer customer_order_id=
-  // Integer.valueOf(order.get("merchant_order_id").toString());
-  //
-  //            String paymobOrderId=order.get("id").toString();
-  //
-  //
-  //            String createdAtISO = order.get("created_at").toString();
-  //            DateTimeFormatter formatter =
-  // DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
-  //            LocalDateTime createdAt = LocalDateTime.parse(createdAtISO, formatter);
-  //
-  //            String status;
-  //            if (success != null && success.equalsIgnoreCase("true")) {
-  //                 status="success";
-  //            } else {
-  //                 status="fail";
-  //            }
-  //            CustomerOrderModel customerOrder = customerOrderRepository.findById(orderId)
-  //                    .orElseThrow(() -> new PaymobException("Order not found"));
-  //            PaymentModel paymentModel = new PaymentModel();
-  //            paymentModel.setAmountCents(amountCents);
-  //            paymentModel.setCurrency(currency);
-  //            paymentModel.setPaymentToken(paymobOrderId);
-  //            paymentModel.setStatus(status);
-  //            paymentModel.setTransactionId(transactionId);
-  //            paymentModel.setCreatedAt(createdAt);
-  //            paymentModel.setCustomerOrderModel(customerOrder);
-  //
-  //
-  //
-  //            paymentRepository.save(paymentModel);
-  //            return ResponseEntity.ok().body("success");
-  //        }
-  //        catch (Exception e){
-  //            throw new PaymobException(e.getMessage());
-  //        }
-  //
-  //
-  //
-  //        }
-  //  @Transactional
   public ResponseEntity<String> processCallBack(Map<String, Object> payload) {
     log.info("process Call back >>>>>>>>>>>>>>>>> ");
 
