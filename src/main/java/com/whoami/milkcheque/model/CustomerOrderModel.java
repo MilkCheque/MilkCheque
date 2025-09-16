@@ -17,7 +17,7 @@ public class CustomerOrderModel {
   private Long customerOrderId;
 
   @Column(name = "is_paid", nullable = false, columnDefinition = "TINYINT DEFAULT 0")
-  private Boolean paid;
+  private Boolean paid = false;
 
   @ManyToOne
   @JoinColumn(name = "customer_id")
