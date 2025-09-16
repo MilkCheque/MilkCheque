@@ -25,6 +25,9 @@ public class SessionModel {
   @JoinColumn(name = "store_table_id")
   private StoreTableModel storeTableModel;
 
+  @Column(name = "is_session_active", unique = false, nullable = false)
+  private Boolean isSessionActive;
+
   @OneToMany(mappedBy = "sessionModel", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<CustomerOrderModel> CustomerOrderList = new HashSet<>();
 

@@ -24,4 +24,8 @@ public class OrderItemModel {
 
   @Column(name = "quantity", nullable = false)
   private Long quantity;
+
+  public void updateQuantityDelta(Long delta) {
+    quantity += delta;
+  }
 }
