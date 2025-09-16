@@ -32,7 +32,13 @@ public class CustomerOrderModel {
 
   @OneToMany(mappedBy = "customerOrderModel", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<PaymentModel> paymentSet = new HashSet<>();
+
   //
-  //    public boolean isPaid() { return paid; }   // ✅ correct
-  //    public void setPaid(boolean paid) { this.paid = paid; }
+  public boolean isPaid() {
+    return paid;
+  }
+
+  public void setPaid(boolean paid) {
+    this.paid = paid;
+  }
 }
