@@ -17,7 +17,7 @@ public class CustomerOrderModel {
   private Long customerOrderId;
 
   @Column(name = "is_paid")
-  private boolean paid;
+  private Boolean paid;
 
   @ManyToOne
   @JoinColumn(name = "customer_id")
