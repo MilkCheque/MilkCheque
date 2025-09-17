@@ -1,6 +1,7 @@
 package com.whoami.milkcheque.service;
 
 import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
+import com.whoami.milkcheque.dto.request.DeleteMenuItemRequest;
 import com.whoami.milkcheque.dto.request.OrderUpdateRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
 import com.whoami.milkcheque.dto.request.UpdateMenuItemRequest;
@@ -223,6 +224,13 @@ public class StoreService {
       }
     }
     menuItemRepository.save(menuItemModel);
+    return ResponseEntity.status(HttpStatus.OK).body(true);
+  }
+
+  public ResponseEntity<Boolean> deleteMenuItem(DeleteMenuItemRequest deleteMenuItemRequest) {
+    staffRequestValidation.validateDeleteMenuItemRequest(deleteMenuItemRequest);
+    MenuItemModel menuItemModel = menuItemRepository.getById(deleteMenuItemRequest.getMenuItemId());
+    menuItemRepository.delete(menuItemModel);
     return ResponseEntity.status(HttpStatus.OK).body(true);
   }
 }

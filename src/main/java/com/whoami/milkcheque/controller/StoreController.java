@@ -1,6 +1,7 @@
 package com.whoami.milkcheque.controller;
 
 import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
+import com.whoami.milkcheque.dto.request.DeleteMenuItemRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
 import com.whoami.milkcheque.dto.request.UpdateMenuItemRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
@@ -64,8 +65,7 @@ public class StoreController {
 
   // TODO: Should be restricted to staff only
   @PostMapping("/menu/delete")
-  public ResponseEntity deleteMenuItem() {
-    // TODO: NOT IMPLEMENTED
-    return ResponseEntity.badRequest().body("NOT IMPLEMENTED");
+  public ResponseEntity deleteMenuItem(@RequestBody DeleteMenuItemRequest deleteMenuItemRequest) {
+    return storeService.deleteMenuItem(deleteMenuItemRequest);
   }
 }

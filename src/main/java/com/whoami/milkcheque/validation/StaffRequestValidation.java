@@ -1,6 +1,7 @@
 package com.whoami.milkcheque.validation;
 
 import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
+import com.whoami.milkcheque.dto.request.DeleteMenuItemRequest;
 import com.whoami.milkcheque.dto.request.OrderUpdateRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
 import com.whoami.milkcheque.dto.request.UpdateMenuItemRequest;
@@ -90,6 +91,11 @@ public class StaffRequestValidation {
   }
 
   public void validateUpdateMenuItemRequest(UpdateMenuItemRequest updateMenuItemRequest) {
+    // TODO: NOT IMPLEMENTED
+    log.warn("validateUpdateMenuItemRequest NOT IMPLEMENTED");
+  }
+
+  public void validateDeleteMenuItemRequest(DeleteMenuItemRequest deleteMenuItemRequest) {
     // TODO: NOT IMPLEMENTED
     log.warn("validateUpdateMenuItemRequest NOT IMPLEMENTED");
   }
