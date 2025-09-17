@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.controller;
 
+import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
@@ -50,9 +51,9 @@ public class StoreController {
 
   // TODO: Should be restricted to staff only
   @PostMapping("/menu/add")
-  public ResponseEntity addMenutItem() {
+  public ResponseEntity addMenutItem(@RequestBody AddMenuItemRequest addMenuItemRequest) {
     // TODO: NOT IMPLEMENTED
-    return ResponseEntity.badRequest().body("NOT IMPLEMENTED");
+    return storeService.addMenuItem(addMenuItemRequest);
   }
 
   @PostMapping("/menu/edit")

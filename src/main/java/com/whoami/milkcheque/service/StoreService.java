@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.service;
 
+import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
 import com.whoami.milkcheque.dto.request.OrderUpdateRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
@@ -182,5 +183,16 @@ public class StoreService {
       throw new SessionOrdersUpdateRequestException(
           "-1", e.getMessage() + ": failed to update session order(s)");
     }
+  }
+
+  public ResponseEntity<Boolean> addMenuItem(AddMenuItemRequest addMenuItemRequest) {
+    staffRequestValidation.validateAddMenuItemRequest(addMenuItemRequest);
+    Mapper mapper = new Mapper();
+    MenuItemModel menuItemModel =
+        mapper.convertAddMenuItemRequestToMenuItemModel(addMenuItemRequest);
+    StoreModel storeModel = storeRepository.getById(addMenuItemRequest.getStoreId());
+    menuItemModel.setStoreModel(storeModel);
+    menuItemRepository.save(menuItemModel);
+    return ResponseEntity.status(HttpStatus.OK).body(true);
   }
 }

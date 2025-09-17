@@ -1,10 +1,13 @@
 package com.whoami.milkcheque.validation;
 
+import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
 import com.whoami.milkcheque.dto.request.OrderUpdateRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
+import com.whoami.milkcheque.exception.MenuItemUpdateException;
 import com.whoami.milkcheque.exception.SessionOrdersUpdateRequestException;
 import com.whoami.milkcheque.model.CustomerOrderModel;
 import com.whoami.milkcheque.model.OrderItemModel;
+import com.whoami.milkcheque.model.StoreModel;
 import com.whoami.milkcheque.model.StoreTableModel;
 import com.whoami.milkcheque.repository.CustomerOrderRepository;
 import com.whoami.milkcheque.repository.OrderItemRepository;
@@ -75,5 +78,11 @@ public class StaffRequestValidation {
         throw new SessionOrdersUpdateRequestException("-6", "no sufficient items to be removed");
       }
     }
+  }
+
+  public void validateAddMenuItemRequest(AddMenuItemRequest addMenuItemRequest) {
+    Optional<StoreModel> storeModelOpt = storeRepository.findById(addMenuItemRequest.getStoreId());
+    if (!storeModelOpt.isPresent())
+      throw new MenuItemUpdateException("-1", "store id does not exist");
   }
 }
