@@ -3,6 +3,7 @@ package com.whoami.milkcheque.service;
 import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
 import com.whoami.milkcheque.dto.request.OrderUpdateRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
+import com.whoami.milkcheque.dto.request.UpdateMenuItemRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
 import com.whoami.milkcheque.dto.response.StoreTableResponse;
@@ -192,6 +193,35 @@ public class StoreService {
         mapper.convertAddMenuItemRequestToMenuItemModel(addMenuItemRequest);
     StoreModel storeModel = storeRepository.getById(addMenuItemRequest.getStoreId());
     menuItemModel.setStoreModel(storeModel);
+    menuItemRepository.save(menuItemModel);
+    return ResponseEntity.status(HttpStatus.OK).body(true);
+  }
+
+  public ResponseEntity<Boolean> updateMenuItem(UpdateMenuItemRequest updateMenuItemRequest) {
+    staffRequestValidation.validateUpdateMenuItemRequest(updateMenuItemRequest);
+    MenuItemModel menuItemModel = menuItemRepository.getById(updateMenuItemRequest.getMenuItemId());
+    for (Map.Entry<String, String> attribute : updateMenuItemRequest.getAttributes().entrySet()) {
+      switch (attribute.getKey()) {
+        case "name":
+          menuItemModel.setMenuItemName(attribute.getValue());
+          break;
+        case "description":
+          menuItemModel.setMenuItemDescription(attribute.getValue());
+          break;
+        case "price":
+          menuItemModel.setMenuItemPrice(Double.parseDouble(attribute.getValue()));
+          break;
+        case "pictureURL":
+          menuItemModel.setMenuItemPictureURL(attribute.getValue());
+          break;
+        case "categoryId":
+          menuItemModel.setMenuItemCategoryId(Integer.parseInt(attribute.getValue()));
+          break;
+        default:
+          // TODO: add warning
+          break;
+      }
+    }
     menuItemRepository.save(menuItemModel);
     return ResponseEntity.status(HttpStatus.OK).body(true);
   }

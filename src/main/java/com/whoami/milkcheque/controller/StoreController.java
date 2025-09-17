@@ -2,6 +2,7 @@ package com.whoami.milkcheque.controller;
 
 import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
+import com.whoami.milkcheque.dto.request.UpdateMenuItemRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
 import com.whoami.milkcheque.dto.response.StoreInfo;
 import com.whoami.milkcheque.dto.response.StoreTableResponse;
@@ -52,18 +53,18 @@ public class StoreController {
   // TODO: Should be restricted to staff only
   @PostMapping("/menu/add")
   public ResponseEntity addMenutItem(@RequestBody AddMenuItemRequest addMenuItemRequest) {
-    // TODO: NOT IMPLEMENTED
     return storeService.addMenuItem(addMenuItemRequest);
   }
 
-  @PostMapping("/menu/edit")
-  public ResponseEntity editMenuItem() {
-    // TODO: NOT IMPLEMENTED
-    return ResponseEntity.badRequest().body("NOT IMPLEMENTED");
+  // TODO: Should be restricted to staff only
+  @PostMapping("/menu/update")
+  public ResponseEntity updateMenuItem(@RequestBody UpdateMenuItemRequest updateMenuItemRequest) {
+    return storeService.updateMenuItem(updateMenuItemRequest);
   }
 
-  @PostMapping("/menu/remove")
-  public ResponseEntity removeMennItem() {
+  // TODO: Should be restricted to staff only
+  @PostMapping("/menu/delete")
+  public ResponseEntity deleteMenuItem() {
     // TODO: NOT IMPLEMENTED
     return ResponseEntity.badRequest().body("NOT IMPLEMENTED");
   }

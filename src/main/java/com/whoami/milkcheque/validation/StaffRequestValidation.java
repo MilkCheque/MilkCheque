@@ -3,6 +3,7 @@ package com.whoami.milkcheque.validation;
 import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
 import com.whoami.milkcheque.dto.request.OrderUpdateRequest;
 import com.whoami.milkcheque.dto.request.SessionOrdersUpdateRequest;
+import com.whoami.milkcheque.dto.request.UpdateMenuItemRequest;
 import com.whoami.milkcheque.exception.MenuItemUpdateException;
 import com.whoami.milkcheque.exception.SessionOrdersUpdateRequestException;
 import com.whoami.milkcheque.model.CustomerOrderModel;
@@ -15,8 +16,10 @@ import com.whoami.milkcheque.repository.StoreRepository;
 import com.whoami.milkcheque.repository.StoreTableRepository;
 import java.util.Map;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class StaffRequestValidation {
   private final StoreRepository storeRepository;
@@ -84,5 +87,10 @@ public class StaffRequestValidation {
     Optional<StoreModel> storeModelOpt = storeRepository.findById(addMenuItemRequest.getStoreId());
     if (!storeModelOpt.isPresent())
       throw new MenuItemUpdateException("-1", "store id does not exist");
+  }
+
+  public void validateUpdateMenuItemRequest(UpdateMenuItemRequest updateMenuItemRequest) {
+    // TODO: NOT IMPLEMENTED
+    log.warn("validateUpdateMenuItemRequest NOT IMPLEMENTED");
   }
 }
