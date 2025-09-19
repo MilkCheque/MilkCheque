@@ -48,6 +48,9 @@ public class PaymentModel {
   @JoinColumn(name = "customer_order_id", nullable = true)
   private CustomerOrderModel customerOrderModel;
 
+  @Column(name = "linked_orders")
+  private String linkedOrders;
+
   //    @ManyToOne
   //    @JoinColumn(name = "payer_customer_id", nullable = true)
   //    private CustomerModel payerCustomer;

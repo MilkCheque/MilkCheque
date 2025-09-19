@@ -3,14 +3,17 @@ package com.whoami.milkcheque.service;
 import com.whoami.milkcheque.config.PaymobConfig;
 import com.whoami.milkcheque.exception.PaymobException;
 import com.whoami.milkcheque.model.CustomerOrderModel;
+import com.whoami.milkcheque.model.LinkedOrderModel;
 import com.whoami.milkcheque.model.PaymentModel;
 import com.whoami.milkcheque.repository.CustomerOrderRepository;
+import com.whoami.milkcheque.repository.LinkedOrderRepository;
 import com.whoami.milkcheque.repository.PaymentRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -24,14 +27,17 @@ public class PaymentService {
   private final RestTemplate restTemplate = new RestTemplate();
   private final PaymentRepository paymentRepository;
   private final CustomerOrderRepository customerOrderRepository;
+  private final LinkedOrderRepository linkedOrderRepository;
 
   public PaymentService(
       PaymobConfig paymobConfig,
       PaymentRepository paymentRepository,
-      CustomerOrderRepository customerOrderRepository) {
+      CustomerOrderRepository customerOrderRepository,
+      LinkedOrderRepository linkedOrderRepository) {
     this.paymobConfig = paymobConfig;
     this.paymentRepository = paymentRepository;
     this.customerOrderRepository = customerOrderRepository;
+    this.linkedOrderRepository = linkedOrderRepository;
   }
 
   private String authenticate() {
@@ -50,7 +56,6 @@ public class PaymentService {
   }
 
   private Integer registerOrder(String authToken, Integer amountCents, String merchantOrderId) {
-    // check if it is already paid if yes return
     String url = "https://accept.paymob.com/api/ecommerce/orders";
 
     Map<String, Object> requestBody = new HashMap<>();
@@ -121,19 +126,41 @@ public class PaymentService {
       String merchantOrderId,
       String email,
       ArrayList<Long> otherMerchantsOrderId) {
-    if (isOrderPaid(merchantOrderId)) {
-      return ResponseEntity.ok().body("Order is already paid");
+    try {
+      if (isOrderPaid(merchantOrderId)) {
+        throw new PaymobException("Order" + merchantOrderId + "is already paid");
+      }
+
+      // TODO: create its own method that is disgusting
+      if (!otherMerchantsOrderId.isEmpty()) {
+        for (Long orderId : otherMerchantsOrderId) {
+          boolean exists = customerOrderRepository.existsById(orderId);
+          boolean isOrderPaid = isOrderPaid(orderId.toString());
+          if (!exists) {
+            throw new PaymobException("Order with ID " + orderId + " does not exist");
+          }
+          if (isOrderPaid) {
+            throw new PaymobException("Order with ID " + orderId + " is already paid");
+          }
+          String joinedIds =
+              otherMerchantsOrderId.stream().map(String::valueOf).collect(Collectors.joining(","));
+          LinkedOrderModel linkedOrderModel = new LinkedOrderModel(merchantOrderId, joinedIds);
+          linkedOrderRepository.save(linkedOrderModel);
+        }
+      }
+
+      String authToken = authenticate();
+      Integer orderId = registerOrder(authToken, amountCents, merchantOrderId);
+      String paymentToken = generatePaymentKey(authToken, orderId, amountCents, email);
+      String iframe = getIframeUrl(paymentToken);
+      return ResponseEntity.ok().body(iframe);
+    } catch (PaymobException e) {
+      throw new PaymobException(e.getMessage());
     }
-    String authToken = authenticate();
-    Integer orderId = registerOrder(authToken, amountCents, merchantOrderId);
-    String paymentToken = generatePaymentKey(authToken, orderId, amountCents, email);
-    String iframe = getIframeUrl(paymentToken);
-    return ResponseEntity.ok().body(iframe);
   }
 
   public boolean isOrderPaid(String merchantOrderId) {
     Long orderId = Long.valueOf(merchantOrderId);
-
     CustomerOrderModel order =
         customerOrderRepository
             .findById(orderId)
@@ -142,6 +169,7 @@ public class PaymentService {
     return order.getPaid();
   }
 
+  // TODO: CLEAN THIS FUNCTION IT SUCKS
   public ResponseEntity<String> processCallBack(Map<String, Object> payload) {
     log.info("process Call back >>>>>>>>>>>>>>>>> ");
 
@@ -162,10 +190,8 @@ public class PaymentService {
       String currency = obj.get("currency").toString();
       Boolean isSuccess = (Boolean) obj.get("success");
       String transactionId = obj.get("id").toString();
-
       Long merchantOrderId = Long.valueOf(order.get("merchant_order_id").toString());
       String paymobOrderId = order.get("id").toString();
-
       String createdAtISO = order.get("created_at").toString();
       LocalDateTime createdAt;
       try {
@@ -175,24 +201,36 @@ public class PaymentService {
         DateTimeFormatter fallback = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
         createdAt = LocalDateTime.parse(createdAtISO, fallback);
       }
-      //              final Logger log = (Logger) LoggerFactory.getLogger(PaymentController.class);
-      //        log.info("ANA HENA {}", success);
 
       String status = isSuccess ? "success" : "fail";
-      log.info("----------------------------------outside conditions ---------------", isSuccess);
-
       CustomerOrderModel customerOrder =
           customerOrderRepository
               .findById(merchantOrderId)
               .orElseThrow(
                   () -> new PaymobException("Order not found with id: " + merchantOrderId));
-      //        customerOrder.setPaid(true);
-      //        customerOrderRepository.saveAndFlush(customerOrder);
 
       if (isSuccess) {
         log.info("----------------------------------in conditions ---------------");
         customerOrder.setPaid(true);
         customerOrderRepository.save(customerOrder);
+
+        LinkedOrderModel linkedOrders =
+            linkedOrderRepository.findByMerchantOrderId(merchantOrderId);
+
+        if (linkedOrders != null && linkedOrders.getLinkedOrdersId() != null) {
+          String[] ids = linkedOrders.getLinkedOrdersId().split(",");
+
+          for (String id : ids) {
+            Long orderId = Long.valueOf(id);
+
+            CustomerOrderModel otherOrderId =
+                customerOrderRepository.findById(orderId).orElse(null);
+            if (otherOrderId != null && !otherOrderId.getPaid()) {
+              otherOrderId.setPaid(true);
+              customerOrderRepository.save(otherOrderId);
+            }
+          }
+        }
       }
 
       PaymentModel paymentModel = new PaymentModel();
@@ -208,7 +246,7 @@ public class PaymentService {
 
       return ResponseEntity.ok("success");
     } catch (Exception e) {
-      e.printStackTrace(); // log full stack trace
+      e.printStackTrace();
       throw new PaymobException("Callback processing failed: " + e.getMessage());
     }
   }
