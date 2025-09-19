@@ -31,11 +31,6 @@ public class MenuItemModel {
   @Column(name = "mitem_category", unique = false, nullable = false)
   private Integer menuItemCategoryId;
 
-  // TODO: Set to false in production
-  // @Lob
-  // @Column(name = "mitem_image", unique = false, nullable = true)
-  // private String menuItemImage;
-
   @ManyToOne
   @JoinColumn(name = "store_id")
   private StoreModel storeModel;

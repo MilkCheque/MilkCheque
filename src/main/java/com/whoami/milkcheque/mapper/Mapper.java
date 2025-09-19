@@ -1,5 +1,6 @@
 package com.whoami.milkcheque.mapper;
 
+import com.whoami.milkcheque.dto.request.AddMenuItemRequest;
 import com.whoami.milkcheque.dto.request.CustomerRequest;
 import com.whoami.milkcheque.dto.request.SignUpRequest;
 import com.whoami.milkcheque.dto.response.MenuItemResponse;
@@ -8,7 +9,6 @@ import com.whoami.milkcheque.dto.response.StoreTableResponse;
 import com.whoami.milkcheque.model.*;
 
 public class Mapper {
-
   public StaffModel convertStaffDTOToModel(SignUpRequest signUpRequest) {
     StaffModel staffModel = new StaffModel();
 
@@ -72,5 +72,16 @@ public class Mapper {
     customerModel.setCustomerFirstName(customerRequest.getFirstName());
     customerModel.setCustomerEmail(customerRequest.getCustomerEmail());
     return customerModel;
+  }
+
+  public MenuItemModel convertAddMenuItemRequestToMenuItemModel(
+      AddMenuItemRequest addMenuItemRequest) {
+    MenuItemModel menuItemModel = new MenuItemModel();
+    menuItemModel.setMenuItemName(addMenuItemRequest.getName());
+    menuItemModel.setMenuItemDescription(addMenuItemRequest.getDescription());
+    menuItemModel.setMenuItemPrice(addMenuItemRequest.getPrice());
+    menuItemModel.setMenuItemPictureURL(addMenuItemRequest.getPictureURL());
+    menuItemModel.setMenuItemCategoryId(addMenuItemRequest.getCategoryId());
+    return menuItemModel;
   }
 }
