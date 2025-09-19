@@ -6,6 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Entity(name = "LinkedOrderModel")
 @Table(name = "linked_order")
 public class LinkedOrderModel {
   @Id
@@ -23,4 +24,6 @@ public class LinkedOrderModel {
     this.merchantOrderId = Long.parseLong(string);
     this.linkedOrdersId = merchantOrderId;
   }
+
+  public LinkedOrderModel() {}
 }
