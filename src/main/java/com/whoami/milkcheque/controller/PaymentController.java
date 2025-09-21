@@ -1,7 +1,7 @@
 package com.whoami.milkcheque.controller;
 
+import com.whoami.milkcheque.dto.request.PaymentRequest;
 import com.whoami.milkcheque.service.PaymentService;
-import java.util.ArrayList;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +17,8 @@ public class PaymentController {
   }
 
   @PostMapping("/pay")
-  public ResponseEntity<String> pay(
-      @RequestParam Integer amountCents,
-      @RequestParam String merchantOrderId,
-      @RequestParam String email,
-      @RequestBody ArrayList<Long> otherMerchantsOrderId) {
-
-    return paymentService.paymob(amountCents, merchantOrderId, email, otherMerchantsOrderId);
+  public ResponseEntity<String> pay(@RequestBody PaymentRequest paymentRequest) {
+    return paymentService.paymob(paymentRequest);
   }
 
   @PostMapping("/callback")

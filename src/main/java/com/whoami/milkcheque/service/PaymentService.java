@@ -1,6 +1,7 @@
 package com.whoami.milkcheque.service;
 
 import com.whoami.milkcheque.config.PaymobConfig;
+import com.whoami.milkcheque.dto.request.PaymentRequest;
 import com.whoami.milkcheque.exception.PaymobException;
 import com.whoami.milkcheque.model.CustomerOrderModel;
 import com.whoami.milkcheque.model.LinkedOrderModel;
@@ -121,12 +122,13 @@ public class PaymentService {
         + paymentToken;
   }
 
-  public ResponseEntity<String> paymob(
-      Integer amountCents,
-      String merchantOrderId,
-      String email,
-      ArrayList<Long> otherMerchantsOrderId) {
+  public ResponseEntity<String> paymob(PaymentRequest paymentRequest) {
     try {
+      Integer amountCents = paymentRequest.getAmountCents();
+      String merchantOrderId = paymentRequest.getMerchantOrderId();
+      String email = paymentRequest.getEmail();
+      ArrayList<Long> otherMerchantsOrderId = paymentRequest.getOtherMerchantsOrderId();
+
       if (isOrderPaid(merchantOrderId)) {
         throw new PaymobException("Order" + merchantOrderId + "is already paid");
       }

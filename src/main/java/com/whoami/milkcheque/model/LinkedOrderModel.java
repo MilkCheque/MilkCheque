@@ -20,9 +20,9 @@ public class LinkedOrderModel {
   @Column(name = "linked_order_id")
   private String linkedOrdersId;
 
-  public LinkedOrderModel(String merchantOrderId, String string) {
-    this.merchantOrderId = Long.parseLong(string);
-    this.linkedOrdersId = merchantOrderId;
+  public LinkedOrderModel(String merchantOrderId, String linkedOrdersId) {
+    this.merchantOrderId = Long.parseLong(merchantOrderId);
+    this.linkedOrdersId = linkedOrdersId;
   }
 
   public LinkedOrderModel() {}
