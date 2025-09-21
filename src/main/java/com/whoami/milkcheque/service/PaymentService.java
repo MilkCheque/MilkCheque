@@ -144,11 +144,11 @@ public class PaymentService {
           if (isOrderPaid) {
             throw new PaymobException("Order with ID " + orderId + " is already paid");
           }
-          String joinedIds =
-              otherMerchantsOrderId.stream().map(String::valueOf).collect(Collectors.joining(","));
-          LinkedOrderModel linkedOrderModel = new LinkedOrderModel(merchantOrderId, joinedIds);
-          linkedOrderRepository.save(linkedOrderModel);
         }
+        String joinedIds =
+            otherMerchantsOrderId.stream().map(String::valueOf).collect(Collectors.joining(","));
+        LinkedOrderModel linkedOrderModel = new LinkedOrderModel(merchantOrderId, joinedIds);
+        linkedOrderRepository.save(linkedOrderModel);
       }
 
       String authToken = authenticate();
