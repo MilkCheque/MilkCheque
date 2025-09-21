@@ -126,11 +126,14 @@ public class PaymentService {
     try {
       Integer amountCents = paymentRequest.getAmountCents();
       String merchantOrderId = paymentRequest.getMerchantOrderId();
-      String email = paymentRequest.getEmail();
+      String email = getEmail(merchantOrderId);
       ArrayList<Long> otherMerchantsOrderId = paymentRequest.getOtherMerchantsOrderId();
+      if (!doesOrderExist(merchantOrderId)) {
+        throw new PaymobException("-1", "Order " + merchantOrderId + " does not exist");
+      }
 
       if (isOrderPaid(merchantOrderId)) {
-        throw new PaymobException("Order" + merchantOrderId + "is already paid");
+        throw new PaymobException("-1", "Order " + merchantOrderId + " is already paid");
       }
 
       // TODO: create its own method that is disgusting
@@ -139,10 +142,10 @@ public class PaymentService {
           boolean exists = customerOrderRepository.existsById(orderId);
           boolean isOrderPaid = isOrderPaid(orderId.toString());
           if (!exists) {
-            throw new PaymobException("Order with ID " + orderId + " does not exist");
+            throw new PaymobException("-1", "Order with ID " + orderId + " does not exist");
           }
           if (isOrderPaid) {
-            throw new PaymobException("Order with ID " + orderId + " is already paid");
+            throw new PaymobException("-1", "Order with ID " + orderId + " is already paid");
           }
         }
         String joinedIds =
@@ -157,8 +160,24 @@ public class PaymentService {
       String iframe = getIframeUrl(paymentToken);
       return ResponseEntity.ok().body(iframe);
     } catch (PaymobException e) {
-      throw new PaymobException(e.getMessage());
+      throw new PaymobException("-1", e.getMessage());
     }
+  }
+
+  public boolean doesOrderExist(String merchantOrderId) {
+    Long orderId = Long.valueOf(merchantOrderId);
+    return customerOrderRepository.existsById(orderId);
+  }
+
+  public String getEmail(String merchantOrderId) {
+    Long orderId = Long.valueOf(merchantOrderId);
+    CustomerOrderModel order =
+        customerOrderRepository
+            .findById(orderId)
+            .orElseThrow(() -> new PaymobException("-1", "Order not found with id: " + orderId));
+
+    String email = order.getCustomerModel().getCustomerEmail();
+    return email;
   }
 
   public boolean isOrderPaid(String merchantOrderId) {
@@ -166,7 +185,8 @@ public class PaymentService {
     CustomerOrderModel order =
         customerOrderRepository
             .findById(orderId)
-            .orElseThrow(() -> new PaymobException("Order not found with id: " + merchantOrderId));
+            .orElseThrow(
+                () -> new PaymobException("-1", "Order not found with id: " + merchantOrderId));
 
     return order.getPaid();
   }
@@ -209,7 +229,7 @@ public class PaymentService {
           customerOrderRepository
               .findById(merchantOrderId)
               .orElseThrow(
-                  () -> new PaymobException("Order not found with id: " + merchantOrderId));
+                  () -> new PaymobException("-1", "Order not found with id: " + merchantOrderId));
 
       if (isSuccess) {
         log.info("----------------------------------in conditions ---------------");
@@ -249,7 +269,7 @@ public class PaymentService {
       return ResponseEntity.ok("success");
     } catch (Exception e) {
       e.printStackTrace();
-      throw new PaymobException("Callback processing failed: " + e.getMessage());
+      throw new PaymobException("-1", "Callback processing failed: " + e.getMessage());
     }
   }
 }

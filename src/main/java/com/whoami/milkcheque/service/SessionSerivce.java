@@ -106,10 +106,13 @@ public class SessionSerivce {
         orderItemsToAdd.add(orderItemModel);
       }
       for (OrderItemModel orderItem : orderItemsToAdd) orderItemRepository.save(orderItem);
-      customerOrderRepository.save(customerOrder.get());
+      CustomerOrderModel savedOrder = customerOrderRepository.save(customerOrder.get());
+      Long customerOrderId = savedOrder.getCustomerOrderId();
+
       // TODO: There should be an observer on the vendor side,
       // to get updated with the new request patch of ordered items
-      return ResponseEntity.ok().body(new CustomerOrderPatchResponse("0", "order patch added"));
+      return ResponseEntity.ok()
+          .body(new CustomerOrderPatchResponse("0", "order patch added", customerOrderId));
     } catch (AddOrderPatchFailureException e) {
       throw new AddOrderPatchFailureException(e.getCode(), e.getMessage());
     } catch (Exception e) {

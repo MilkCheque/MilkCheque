@@ -1,7 +1,14 @@
 package com.whoami.milkcheque.exception;
 
 public class PaymobException extends RuntimeException {
-  public PaymobException(String message) {
+  private final String code;
+
+  public PaymobException(String code, String message) {
     super(message);
+    this.code = code;
+  }
+
+  public String getCode() {
+    return code;
   }
 }

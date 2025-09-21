@@ -78,4 +78,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     errorModel.setMessage(exception.getMessage());
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
   }
+
+  @ExceptionHandler(PaymobException.class)
+  public ResponseEntity<Object> handlePaymobException(PaymobException exception) {
+    ErrorModel errorModel = new ErrorModel();
+    errorModel.setCode(exception.getCode());
+    errorModel.setMessage(exception.getMessage());
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorModel);
+  }
 }

@@ -7,6 +7,5 @@ import lombok.Data;
 public class PaymentRequest {
   Integer amountCents;
   String merchantOrderId;
-  String email;
   ArrayList<Long> otherMerchantsOrderId;
 }
