@@ -2,10 +2,10 @@ package com.whoami.milkcheque.service;
 
 import com.whoami.milkcheque.dto.request.CustomerOrderPatchRequest;
 import com.whoami.milkcheque.dto.request.CustomerRequest;
-import com.whoami.milkcheque.dto.response.AllOrdersResponse;
 import com.whoami.milkcheque.dto.response.CustomerOrderPatchResponse;
 import com.whoami.milkcheque.dto.response.CustomerResponse;
 import com.whoami.milkcheque.dto.response.OrderItemInfo;
+import com.whoami.milkcheque.dto.response.OrderResponse;
 import com.whoami.milkcheque.exception.AddOrderPatchFailureException;
 import com.whoami.milkcheque.exception.LoginProcessFailureException;
 import com.whoami.milkcheque.exception.MenuItemRetrievalException;
@@ -184,7 +184,7 @@ public class SessionSerivce {
     return sessionModel.getSessionId();
   }
 
-  public ResponseEntity<ArrayList<AllOrdersResponse>> getAllOrders(Long sessionId) {
+  public ResponseEntity<ArrayList<OrderResponse>> getAllOrders(Long sessionId) {
     try {
       Optional<SessionModel> sessionOptional = sessionRepository.findById(sessionId);
       if (!sessionOptional.isPresent()) {
@@ -192,7 +192,7 @@ public class SessionSerivce {
       }
       SessionModel sessionModel = sessionOptional.get();
       Set<CustomerModel> allCustomers = sessionModel.getSessionCustomers();
-      ArrayList<AllOrdersResponse> allOrdersResponses = new ArrayList<>();
+      ArrayList<OrderResponse> allOrdersResponses = new ArrayList<>();
 
       for (CustomerModel customer : allCustomers) {
         Set<CustomerOrderModel> orders = new HashSet<>(customer.getOrdersSet());
@@ -215,17 +215,60 @@ public class SessionSerivce {
         }
         ArrayList<OrderItemInfo> orderItems = new ArrayList<>(itemMap.values());
 
-        AllOrdersResponse allOrdersResponse =
-            new AllOrdersResponse(
+        OrderResponse allOrdersResponse =
+            new OrderResponse(
                 customer.getCustomerId(), customer.getCustomerFirstName(), orderItems);
         allOrdersResponses.add(allOrdersResponse);
       }
       return ResponseEntity.ok().body(allOrdersResponses);
 
     } catch (Exception e) {
-      throw new OrdersRetrievalException(e.getMessage());
+      throw new OrdersRetrievalException("-1", e.getMessage());
     }
   }
+
+  public ResponseEntity<OrderResponse> getCustomerOrder(Long orderId) {
+    try {
+      CustomerOrderModel customerOrder =
+          customerOrderRepository
+              .findById(orderId)
+              .orElseThrow(
+                  () -> new OrdersRetrievalException("-1", "Order not found with id: " + orderId));
+      CustomerModel customer = customerOrder.getCustomerModel();
+
+      Set<CustomerOrderModel> orders = new HashSet<>(customer.getOrdersSet());
+      Map<Long, OrderItemInfo> itemMap = new HashMap<>();
+
+      for (CustomerOrderModel order : orders) {
+        for (OrderItemModel orderItem : new HashSet<>(order.getOrderItemsSet())) {
+          MenuItemModel menuitemModel = orderItem.getMenuItemModel();
+          Long menuItemId = menuitemModel.getMenuId();
+          String menuItemName = menuitemModel.getMenuItemName();
+          Long quantity = orderItem.getQuantity();
+          Double price = menuitemModel.getMenuItemPrice();
+
+          itemMap.merge(
+              menuItemId,
+              new OrderItemInfo(menuItemName, quantity, price),
+              (existing, newItem) -> {
+                existing.setQuantiy(existing.getQuantity() + newItem.getQuantity());
+                return existing;
+              });
+        }
+      }
+
+      ArrayList<OrderItemInfo> orderItems = new ArrayList<>(itemMap.values());
+
+      OrderResponse response =
+          new OrderResponse(customer.getCustomerId(), customer.getCustomerFirstName(), orderItems);
+
+      return ResponseEntity.ok(response);
+
+    } catch (Exception e) {
+      throw new OrdersRetrievalException("-1", e.getMessage());
+    }
+  }
+
   // customer won't be able to scan another qr code anyway
   //  private boolean isCustomerInSession(Long customerId) {
   //    Optional<CustomerModel> customerModel = customerRepository.findById(customerId);
