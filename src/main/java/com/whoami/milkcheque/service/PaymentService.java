@@ -6,9 +6,11 @@ import com.whoami.milkcheque.exception.PaymobException;
 import com.whoami.milkcheque.model.CustomerOrderModel;
 import com.whoami.milkcheque.model.LinkedOrderModel;
 import com.whoami.milkcheque.model.PaymentModel;
+import com.whoami.milkcheque.model.SessionModel;
 import com.whoami.milkcheque.repository.CustomerOrderRepository;
 import com.whoami.milkcheque.repository.LinkedOrderRepository;
 import com.whoami.milkcheque.repository.PaymentRepository;
+import com.whoami.milkcheque.repository.SessionRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,16 +31,19 @@ public class PaymentService {
   private final PaymentRepository paymentRepository;
   private final CustomerOrderRepository customerOrderRepository;
   private final LinkedOrderRepository linkedOrderRepository;
+  private final SessionRepository sessionRepository;
 
   public PaymentService(
       PaymobConfig paymobConfig,
       PaymentRepository paymentRepository,
       CustomerOrderRepository customerOrderRepository,
-      LinkedOrderRepository linkedOrderRepository) {
+      LinkedOrderRepository linkedOrderRepository,
+      SessionRepository sessionRepository) {
     this.paymobConfig = paymobConfig;
     this.paymentRepository = paymentRepository;
     this.customerOrderRepository = customerOrderRepository;
     this.linkedOrderRepository = linkedOrderRepository;
+    this.sessionRepository = sessionRepository;
   }
 
   private String authenticate() {
@@ -251,6 +256,17 @@ public class PaymentService {
               otherOrderId.setPaid(true);
               customerOrderRepository.save(otherOrderId);
             }
+          }
+        }
+        SessionModel session = customerOrder.getSessionModel();
+        if (session != null) {
+          boolean allPaid =
+              session.getCustomerOrderList().stream().allMatch(CustomerOrderModel::getPaid);
+
+          if (allPaid && session.getIsSessionActive()) {
+            session.setIsSessionActive(false);
+            sessionRepository.save(session);
+            log.info("Session {} is now inactive (all orders paid)", session.getSessionId());
           }
         }
       }
