@@ -12,8 +12,6 @@ public interface SessionRepository extends JpaRepository<SessionModel, Long> {
   SessionModel getByStoreModel_StoreIdAndStoreTableModel_StoreTableIdAndIsSessionActiveEquals(
       Long storeId, Long storeTableId, Boolean isSessionActive);
 
-  //  @Query("SELECT s FROM SessionModel s JOIN s.sessionCustomers c WHERE c.customerId =
-  // :customerId")
-  //  List<SessionModel> findAllByCustomerId(@Param("customerId") Long customerId);
-
+  Optional<SessionModel> findFirstByStoreTableModel_StoreTableIdAndIsSessionActiveTrue(
+      Long tableId);
 }

@@ -153,7 +153,7 @@ public class SessionSerivce {
       throw new LoginProcessFailureException("-1", "Store table not found");
     }
     Optional<SessionModel> optionalSessionModel =
-        sessionRepository.findByStoreTableModel_StoreTableId(tableId);
+        sessionRepository.findFirstByStoreTableModel_StoreTableIdAndIsSessionActiveTrue(tableId);
     if (optionalSessionModel.isPresent()) {
       return addCustomerToSession(tableId, customerId);
     }
@@ -168,16 +168,19 @@ public class SessionSerivce {
     sessionModel.getSessionCustomers().add(customerModel);
     sessionModel.setStoreTableModel(storeTableModel);
     sessionModel.setStoreModel(storeModel);
+    sessionModel.setIsSessionActive(true);
     sessionRepository.save(sessionModel);
 
     return sessionModel.getSessionId();
   }
 
   private Long addCustomerToSession(Long tableId, Long customerId) {
-    SessionModel sessionModel = sessionRepository.getByStoreTableModel_StoreTableId(tableId);
-    if (sessionModel == null) {
+    Optional<SessionModel> sessionModelOptional =
+        sessionRepository.findFirstByStoreTableModel_StoreTableIdAndIsSessionActiveTrue(tableId);
+    if (sessionModelOptional == null || !sessionModelOptional.isPresent()) {
       throw new RuntimeException("No session found for tableId " + tableId);
     }
+    SessionModel sessionModel = sessionModelOptional.get();
     CustomerModel customerModel = customerRepository.findById(customerId).get();
     sessionModel.getSessionCustomers().add(customerModel);
     sessionRepository.save(sessionModel);
